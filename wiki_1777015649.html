@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异地就医备案办理全指南</title>
+    <style>
+        :root {
+            --bg-page: #F1F5F9; 
+            --bg-card: #FFFFFF; 
+            --text-main: #1E293B;
+            --text-secondary: #64748B; 
+            --accent: #4F46E5; 
+            --accent-light: #EEF2FF;
+            --border: #E2E8F0; 
+            --radius-lg: 24px; 
+            --radius-md: 16px;
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-md: 0 10px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, "PingFang SC", sans-serif; 
+            background: radial-gradient(circle at top right, #EEF2FF, var(--bg-page));
+            color: var(--text-main); 
+            line-height: 1.7; 
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Header 优化 */
+        .top-header { display: flex; align-items: center; justify-content: space-between; padding: 40px 0; }
+        .logo-text { font-size: 1.75rem; font-weight: 850; letter-spacing: -0.5px; background: linear-gradient(135deg, #4F46E5, #818CF8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .info-pill { background: white; padding: 8px 20px; border-radius: 100px; font-weight: 600; font-size: 0.9rem; box-shadow: var(--shadow-sm); border: 1px solid var(--border); color: var(--text-secondary); }
+
+        /* 导航 Tab 优化 */
+        .nav-tabs-wrapper { background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: var(--radius-lg); padding: 6px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 24px; position: sticky; top: 20px; z-index: 100; }
+        .nav-tabs { display: flex; gap: 4px; }
+        .nav-tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; border-radius: calc(var(--radius-lg) - 6px); font-weight: 600; color: var(--text-secondary); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 0.95rem; }
+        .nav-tab:hover { background: var(--bg-page); color: var(--accent); }
+        .nav-tab.active { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); }
+
+        /* 主容器 */
+        .main-content { display: flex; gap: 40px; align-items: flex-start; padding-bottom: 100px; }
+        
+        /* 侧边栏优化 - 步进器风格 */
+        .sidebar { width: 280px; flex-shrink: 0; position: sticky; top: 100px; }
+        .sidebar-item { 
+            display: flex; align-items: flex-start; gap: 12px; padding: 16px; border-radius: var(--radius-md); 
+            margin-bottom: 8px; cursor: pointer; transition: all 0.2s ease; border-left: 3px solid transparent;
+        }
+        .sidebar-item:hover { background: white; transform: translateX(5px); }
+        .sidebar-item.active { background: white; border-left-color: var(--accent); box-shadow: var(--shadow-sm); }
+        .sidebar-item.active .sidebar-title { color: var(--accent); font-weight: 700; }
+        .checkbox-mock { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 50%; margin-top: 4px; transition: all 0.2s; }
+        .sidebar-item.active .checkbox-mock { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 4px var(--accent-light); }
+        .sidebar-title { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.4; }
+
+        /* 内容区优化 */
+        .body-content { flex: 1; background: white; border-radius: var(--radius-lg); padding: 48px; box-shadow: var(--shadow-md); border: 1px solid var(--border); }
+        .content-section { display: none; animation: slideUp 0.5s ease; }
+        .content-section.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .title-group h1 { font-size: 2.5rem; font-weight: 850; margin-bottom: 40px; color: var(--text-main); letter-spacing: -1px; }
+        .subheading { margin-top: 60px; margin-bottom: 24px; scroll-margin-top: 100px; }
+        .subheading h2 { font-size: 1.5rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 12px; }
+        .subheading h2::after { content: ""; flex: 1; height: 1px; background: var(--border); margin-left: 10px; }
+
+        /* 列表项优化 */
+        .list-item-custom { 
+            position: relative; padding: 20px 24px; background: #F8FAFC; border-radius: var(--radius-md); 
+            margin-bottom: 16px; border: 1px solid var(--border); transition: all 0.2s;
+        }
+        .list-item-custom:hover { border-color: var(--accent); background: white; transform: scale(1.01); }
+        .list-item-custom p { font-size: 1.05rem; color: #334155; }
+        
+        /* 媒体资源优化 */
+        .content-image { width: 100%; border-radius: var(--radius-md); margin: 20px 0; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+        .audio-player-card { 
+            background: #F8FAFC; padding: 24px; border-radius: var(--radius-md); margin-bottom: 20px; 
+            border: 1px solid var(--border); scroll-margin-top: 100px;
+        }
+        .audio-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: var(--accent); }
+        audio { width: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
+
+        /* 视频/幻灯片播放器优化 */
+        .pseudo-player { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        .player-viewport { cursor: pointer; height: 100%; width: 100%; }
+        .player-controls { 
+            position: absolute; bottom: 0; width: 100%; height: 60px; 
+            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); 
+            display: flex; align-items: center; padding: 0 24px; gap: 20px; color: white; 
+        }
+        .progress-container { flex: 1; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; }
+        .progress-bar { height: 100%; background: var(--accent); border-radius: 10px; width: 0%; transition: width 0.1s linear; }
+
+        @media (max-width: 900px) {
+            .main-content { flex-direction: column; }
+            .sidebar { width: 100%; position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .body-content { padding: 24px; }
+            .title-group h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="top-header">
+            <div class="logo-text">生活百科 Agent</div>
+            <div class="info-pill">异地就医备案办理全指南 · 深度指南</div>
+        </header>
+
+        <div class="nav-tabs-wrapper">
+            <nav class="nav-tabs">
+                <div class="nav-tab active" data-tab="text">📝 核心方案</div>
+                <div class="nav-tab" data-tab="mindmap">🖼️ 视觉图解</div>
+                <div class="nav-tab" data-tab="audio">🎙️ 专家音频</div>
+                <div class="nav-tab" data-tab="slides">🎥 沉浸演示</div>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <aside class="sidebar">
+        <div class="sidebar-item active" data-index="0">
+            <div class="checkbox-mock"></div>
+            <div class="sidebar-title">备案条件与准备材料</div>
+        </div>
+        <div class="sidebar-item " data-index="1">
+            <div class="checkbox-mock"></div>
+            <div class="sidebar-title">线上办理操作步骤</div>
+        </div>
+        <div class="sidebar-item " data-index="2">
+            <div class="checkbox-mock"></div>
+            <div class="sidebar-title">线下办理流程</div>
+        </div>
+        <div class="sidebar-item " data-index="3">
+            <div class="checkbox-mock"></div>
+            <div class="sidebar-title">常见误区与注意事项</div>
+        </div></aside>
+            <article class="body-content">
+                <div id="text" class="content-section active">
+                    <div class="title-group"><h1>异地就医备案办理全指南</h1></div>
+                    <div class="subheading" id="text-section-0"><h2>备案条件与准备材料</h2></div><div class="list-item-custom"><p>满足条件：正常参保缴费，备案原因符合要求（含异地安置/工作/转诊/临时就医等）</p></div><div class="list-item-custom"><p>必备材料：本人有效身份证或社会保障卡原件</p></div><div class="list-item-custom"><p>补充材料：异地居住需提供居住证/居住证明，异地转诊需提供定点医院转诊证明，代办需额外提供代办人身份证</p></div><div class="list-item-custom"><p>线上办理仅需准备电子版材料，无需打印纸质版</p></div><div class="subheading" id="text-section-1"><h2>线上办理操作步骤</h2></div><div class="list-item-custom"><p>第1步：登录国家医保服务平台APP，完成实名认证后进入「业务办理」板块</p></div><div class="list-item-custom"><p>第2步：点击「异地就医备案」→「异地就医备案申请」，确认个人参保地信息</p></div><div class="list-item-custom"><p>第3步：选择备案类型，填写就医地、备案起止时间，按要求上传证明材料</p></div><div class="list-item-custom"><p>第4步：提交申请，1-3个工作日可查询审核结果，通过后即可异地直接结算</p></div><div class="subheading" id="text-section-2"><h2>线下办理流程</h2></div><div class="list-item-custom"><p>第1步：携带所有纸质材料前往参保地医保经办服务窗口</p></div><div class="list-item-custom"><p>第2步：向工作人员提出异地就医备案申请，配合完成材料核验</p></div><div class="list-item-custom"><p>第3步：符合条件的当场完成备案登记，信息录入医保系统</p></div><div class="list-item-custom"><p>第4步：可现场打印备案凭证，之后即可持卡到异地定点医院就医</p></div><div class="subheading" id="text-section-3"><h2>常见误区与注意事项</h2></div><div class="list-item-custom"><p>未提前备案直接就医：多数地区会降低10%-20%报销比例，部分地区无法直接结算</p></div><div class="list-item-custom"><p>备案后并非仅限一家医院：多数地区支持备案就医地所有定点医疗机构直接结算</p></div><div class="list-item-custom"><p>备案有效期：长期备案永久有效，临时出行备案一般有效期3-6个月，到期可续办</p></div><div class="list-item-custom"><p>更改就医地：可线上取消原有备案后，重新申请新就医地备案即可，无需线下跑</p></div>
+                </div>
+                <div id="mindmap" class="content-section">
+                    <div class="title-group"><h1>视觉演示</h1></div>
+                    
+            <div id="mindmap-section-0" class="subheading"><h2>备案条件与准备材料</h2></div>
+            <img src="https://s.coze.cn/t/uscrjM7yj_s/" class="content-image">
+            <div id="mindmap-section-1" class="subheading"><h2>线上办理操作步骤</h2></div>
+            <img src="https://s.coze.cn/t/eUcAG8ZgAQ4/" class="content-image">
+            <div id="mindmap-section-2" class="subheading"><h2>线下办理流程</h2></div>
+            <img src="https://s.coze.cn/t/DpLmebdLFW0/" class="content-image">
+            <div id="mindmap-section-3" class="subheading"><h2>常见误区与注意事项</h2></div>
+            <img src="https://s.coze.cn/t/iqqLSpn9aPU/" class="content-image">
+                </div>
+                <div id="audio" class="content-section">
+                    <div class="title-group"><h1>音频精讲</h1></div>
+                    
+            <div id="audio-section-0" class="audio-player-card">
+                <div class="audio-title">🎙️ 备案条件与准备材料</div>
+                <audio controls preload="none"><source src="https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_7b0e0277-56a1-463b-97cd-2f708f5f1d08.mp3?lk3s=da27ec82&amp;x-expires=1777274819&amp;x-signature=TL9tPUXdCIiHaZdAFofs4%2BigglM%3D" type="audio/mpeg"></audio>
+            </div>
+            <div id="audio-section-1" class="audio-player-card">
+                <div class="audio-title">🎙️ 线上办理操作步骤</div>
+                <audio controls preload="none"><source src="https://lf6-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_a410e878-f0cc-4a36-872b-bd5394146c4e.mp3?lk3s=da27ec82&amp;x-expires=1777274818&amp;x-signature=1qKDG40P4uaDvTgkalw8vjOV7oA%3D" type="audio/mpeg"></audio>
+            </div>
+            <div id="audio-section-2" class="audio-player-card">
+                <div class="audio-title">🎙️ 线下办理流程</div>
+                <audio controls preload="none"><source src="https://lf9-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_e1aab98e-497f-4f71-86dd-3e8fd003850e.mp3?lk3s=da27ec82&amp;x-expires=1777274816&amp;x-signature=5giccy%2BiQCrgAnb3PbvZrVcyywc%3D" type="audio/mpeg"></audio>
+            </div>
+            <div id="audio-section-3" class="audio-player-card">
+                <div class="audio-title">🎙️ 常见误区与注意事项</div>
+                <audio controls preload="none"><source src="https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_c72c03f4-45c6-410a-bc0b-63bf7131e0dc.mp3?lk3s=da27ec82&amp;x-expires=1777274817&amp;x-signature=tOHP09LvpU2QLjIFv3mH%2F%2FhsYnk%3D" type="audio/mpeg"></audio>
+            </div>
+                </div>
+                <div id="slides" class="content-section">
+                    <div class="title-group"><h1>沉浸式影音播放</h1></div>
+                    <div class="pseudo-player" id="videoPlayer">
+                        <audio id="coreAudio" preload="auto"></audio>
+                        <div class="player-viewport" id="viewport">
+                            <img id="bgImg" class="player-img" style="width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 0.5s;" src="" alt="背景">
+                            <div id="playOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.2);">
+                                <div style="width:70px; height:70px; background:var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; box-shadow:0 10px 20px rgba(0,0,0,0.3);">▶</div>
+                            </div>
+                        </div>
+                        <div class="player-controls">
+                            <div id="ctrlBtn" style="cursor:pointer; font-size:18px;">⏸</div>
+                            <div class="progress-container" id="progressBarBg"><div class="progress-bar" id="progressBar"></div></div>
+                            <div id="partText" style="font-size:12px; font-weight:600; min-width:60px;">1 / 4</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <script>
+        const mediaPlaylist = [{"image": "https://s.coze.cn/t/uscrjM7yj_s/", "audio": "https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_7b0e0277-56a1-463b-97cd-2f708f5f1d08.mp3?lk3s=da27ec82&x-expires=1777274819&x-signature=TL9tPUXdCIiHaZdAFofs4%2BigglM%3D"}, {"image": "https://s.coze.cn/t/eUcAG8ZgAQ4/", "audio": "https://lf6-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_a410e878-f0cc-4a36-872b-bd5394146c4e.mp3?lk3s=da27ec82&x-expires=1777274818&x-signature=1qKDG40P4uaDvTgkalw8vjOV7oA%3D"}, {"image": "https://s.coze.cn/t/DpLmebdLFW0/", "audio": "https://lf9-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_e1aab98e-497f-4f71-86dd-3e8fd003850e.mp3?lk3s=da27ec82&x-expires=1777274816&x-signature=5giccy%2BiQCrgAnb3PbvZrVcyywc%3D"}, {"image": "https://s.coze.cn/t/iqqLSpn9aPU/", "audio": "https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_c72c03f4-45c6-410a-bc0b-63bf7131e0dc.mp3?lk3s=da27ec82&x-expires=1777274817&x-signature=tOHP09LvpU2QLjIFv3mH%2F%2FhsYnk%3D"}];
+        
+        // Tab 切换逻辑
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(tab.dataset.tab).classList.add('active');
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        });
+
+        // 侧边栏跳转逻辑
+        document.querySelector('.sidebar').addEventListener('click', (e) => {
+            const item = e.target.closest('.sidebar-item');
+            if(!item) return;
+            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            
+            const idx = item.dataset.index;
+            const activeTab = document.querySelector('.content-section.active').id;
+            const targetId = `${activeTab}-section-${idx}`;
+            const targetEl = document.getElementById(targetId);
+            if(targetEl) window.scrollTo({top: targetEl.offsetTop - 120, behavior: 'smooth'});
+        });
+
+        // 简易播放器逻辑
+        let cur = 0; let playing = false;
+        const audio = document.getElementById('coreAudio');
+        const bg = document.getElementById('bgImg');
+        const pBar = document.getElementById('progressBar');
+
+        function load(i) {
+            if(i >= mediaPlaylist.length) return;
+            bg.style.opacity = 0;
+            setTimeout(() => { 
+                bg.src = mediaPlaylist[i].image; 
+                bg.style.opacity = 1; 
+            }, 300);
+            audio.src = mediaPlaylist[i].audio;
+            document.getElementById('partText').innerText = `${i+1} / ${mediaPlaylist.length}`;
+            if(playing) audio.play();
+        }
+
+        document.getElementById('viewport').onclick = () => {
+            if(audio.paused) { audio.play(); playing=true; document.getElementById('playOverlay').style.display='none'; document.getElementById('ctrlBtn').innerText='⏸'; }
+            else { audio.pause(); playing=false; document.getElementById('playOverlay').style.display='flex'; document.getElementById('ctrlBtn').innerText='▶'; }
+        };
+
+        audio.ontimeupdate = () => pBar.style.width = (audio.currentTime/audio.duration*100) + '%';
+        audio.onended = () => { cur++; if(cur < mediaPlaylist.length) load(cur); else { cur=0; load(0); playing=false; document.getElementById('playOverlay').style.display='flex'; } };
+        
+        if(mediaPlaylist.length > 0) load(0);
+    </script>
+</body>
+</html>
