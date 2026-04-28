@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异地就医备案办理指南</title>
+    <style>
+        :root {
+            --bg-body: #F8FAFC;
+            --bg-surface: #FFFFFF;
+            --primary: #4F46E5;
+            --primary-light: #EEF2FF;
+            --text-main: #0F172A;
+            --text-sub: #64748B;
+            --border-color: #E2E8F0;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --sidebar-width: 280px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, "PingFang SC", sans-serif; 
+            background: var(--bg-body);
+            color: var(--text-main); 
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header 头部 */
+        header.top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+        .page-tag { background: var(--bg-body); padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; color: var(--text-sub); border: 1px solid var(--border-color); }
+
+        /* 核心改进：导航栏 Grid 对齐 */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            background: #FDFDFF;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .nav-left-blank {
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding-left: 32px;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 12px 40px;
+            align-items: center;
+        }
+        .nav-tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid transparent;
+        }
+        .nav-tab:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-tab.active { 
+            background: var(--primary); 
+            color: white; 
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* 主体内容 Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            min-height: 750px;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            background: #FAFBFE;
+            padding: 40px 24px;
+            border-right: 1px solid var(--border-color);
+        }
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border-radius: 14px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .sidebar-item:hover { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transform: translateX(4px); }
+        .sidebar-item.active { background: white; border-color: var(--border-color); box-shadow: var(--shadow); }
+        .dot { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid var(--border-color); transition: 0.3s; }
+        .sidebar-item.active .dot { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        .sidebar-title { font-size: 0.9rem; font-weight: 500; color: var(--text-sub); transition: 0.2s; }
+        .sidebar-item.active .sidebar-title { color: var(--text-main); font-weight: 700; }
+
+        /* 内容区 */
+        .main-content { padding: 50px 60px; }
+        .content-pane { display: none; animation: fadeIn 0.5s ease; }
+        .content-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 2.4rem; font-weight: 850; margin-bottom: 40px; letter-spacing: -1px; }
+        .section-header { margin: 48px 0 24px; display: flex; align-items: center; gap: 12px; scroll-margin-top: 40px; }
+        .section-header h2 { font-size: 1.5rem; font-weight: 800; }
+        .section-header::before { content: ""; width: 6px; height: 24px; background: var(--primary); border-radius: 10px; }
+
+        .info-card {
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            padding: 22px 26px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 16px;
+            transition: 0.3s;
+        }
+        .info-card:hover { background: white; border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow); }
+        .info-card p { line-height: 1.7; font-size: 1.05rem; }
+
+        .media-img { width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow); margin: 20px 0; }
+        
+        /* 播放器 */
+        .player-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .player-ui { position: absolute; bottom: 0; width: 100%; height: 64px; background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); display: flex; align-items: center; padding: 0 24px; gap: 20px; color: white; }
+        .progress-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; position: relative; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 10px; width: 0%; }
+
+        @media (max-width: 900px) {
+            .nav-grid, .content-grid { grid-template-columns: 1fr; }
+            .nav-left-blank, .sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="top-bar">
+            <div class="logo">生活百科 Agent</div>
+            <div class="page-tag">异地就医备案办理指南</div>
+        </header>
+
+        <!-- 修正后的对齐导航栏 -->
+        <div class="nav-grid">
+            <div class="nav-left-blank">导航目录</div>
+            <nav class="nav-tabs">
+                <div class="nav-tab active" data-tab="text">📝 核心方案</div>
+                <div class="nav-tab" data-tab="mindmap">🖼️ 视觉图解</div>
+                <div class="nav-tab" data-tab="audio">🎙️ 专家音频</div>
+                <div class="nav-tab" data-tab="slides">🎥 沉浸演示</div>
+            </nav>
+        </div>
+
+        <div class="content-grid">
+            <aside class="sidebar"><div class="sidebar-item active" data-index="0"><div class="dot"></div><div class="sidebar-title">备案前提与准备材料</div></div><div class="sidebar-item " data-index="1"><div class="dot"></div><div class="sidebar-title">线上办理核心步骤</div></div><div class="sidebar-item " data-index="2"><div class="dot"></div><div class="sidebar-title">线下办理操作流程</div></div><div class="sidebar-item " data-index="3"><div class="dot"></div><div class="sidebar-title">常见误区与注意事项</div></div></aside>
+            <main class="main-content">
+                <div id="text" class="content-pane active">
+                    <h1>异地就医备案办理指南</h1>
+                    <div class="section-header" id="text-sec-0"><h2>备案前提与准备材料</h2></div><div class="info-card"><p>参保人需正常缴纳基本医保，处于医保待遇享受期</p></div><div class="info-card"><p>必备基础材料：本人身份证/电子医保凭证</p></div><div class="info-card"><p>对应补充材料：异地安置要居住证明、转诊要医院转诊证明、急诊要急诊诊断证明</p></div><div class="section-header" id="text-sec-1"><h2>线上办理核心步骤</h2></div><div class="info-card"><p>第1步：打开国家医保服务平台APP，登录本人医保账号</p></div><div class="info-card"><p>第2步：进入「业务办理」板块，点击「异地就医备案申请」</p></div><div class="info-card"><p>第3步：选择备案类型，填写参保地、就医地信息，上传证明材料</p></div><div class="info-card"><p>第4步：提交申请，1-3个工作日审核通过后即可生效使用</p></div><div class="section-header" id="text-sec-2"><h2>线下办理操作流程</h2></div><div class="info-card"><p>第1步：携带所有准备好的材料，前往参保地医保经办机构窗口</p></div><div class="info-card"><p>第2步：填写《异地就医备案登记表》，提交材料给工作人员审核</p></div><div class="info-card"><p>第3步：审核通过后当场完成备案，可现场查询备案生效状态</p></div><div class="info-card"><p>提示：提前拨打12393咨询，部分地区支持异地经办代收材料</p></div><div class="section-header" id="text-sec-3"><h2>常见误区与注意事项</h2></div><div class="info-card"><p>长期备案多数长期有效，临时备案有效期多为6-12个月，到期可续办</p></div><div class="info-card"><p>未提前备案的异地急诊，多数地区支持事后补办备案不降低报销比例</p></div><div class="info-card"><p>备案仅对应就医地生效，更换就医城市需要重新办理变更备案</p></div><div class="info-card"><p>备案成功后可直接刷卡/码结算，无需垫付后回参保地手工报销</p></div>
+                </div>
+                <div id="mindmap" class="content-pane">
+                    <h1>视觉图解</h1>
+                    <div class="section-header" id="mindmap-sec-0"><h2>备案前提与准备材料</h2></div><img src="https://s.coze.cn/t/2O3zI708tJI/" class="media-img"><div class="section-header" id="mindmap-sec-1"><h2>线上办理核心步骤</h2></div><img src="https://s.coze.cn/t/DZoJqn8ytV0/" class="media-img"><div class="section-header" id="mindmap-sec-2"><h2>线下办理操作流程</h2></div><img src="https://s.coze.cn/t/ZElDw6IdnF8/" class="media-img"><div class="section-header" id="mindmap-sec-3"><h2>常见误区与注意事项</h2></div><img src="https://s.coze.cn/t/26-AKlfo84Y/" class="media-img">
+                </div>
+                <div id="audio" class="content-pane">
+                    <h1>专家音频</h1>
+                    <div class="info-card" id="audio-sec-0"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 备案前提与准备材料</div><audio controls style="width:100%"><source src="https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_07dd457a-1849-4bcb-88c9-b2a2d9e66bb5.mp3?lk3s=da27ec82&amp;x-expires=1777607109&amp;x-signature=PiBwuS0qLCTu%2BTQw%2BThLJ4mJEFo%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-1"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 线上办理核心步骤</div><audio controls style="width:100%"><source src="https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_c5c0cc4f-a770-4bce-8f92-ddeb446b5761.mp3?lk3s=da27ec82&amp;x-expires=1777607109&amp;x-signature=vgfaskR0aQAcalZz0kbEbGMiSqs%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-2"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 线下办理操作流程</div><audio controls style="width:100%"><source src="https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_d8a7205c-a9a5-4057-9127-097b1e4c363c.mp3?lk3s=da27ec82&amp;x-expires=1777607109&amp;x-signature=%2B3mAqsQ5oL459m3sznCJQVNLDic%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-3"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 常见误区与注意事项</div><audio controls style="width:100%"><source src="https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_662df87a-2b43-4e7e-959d-d0049892af8e.mp3?lk3s=da27ec82&amp;x-expires=1777607109&amp;x-signature=v3fN%2B9nOqTAYoszPg8wakkOcC2g%3D" type="audio/mpeg"></audio></div>
+                </div>
+                <div id="slides" class="content-pane">
+                    <h1>影音沉浸演示</h1>
+                    <div class="player-wrap">
+                        <audio id="vAudio"></audio>
+                        <div id="vViewport" style="width:100%; height:100%; cursor:pointer; position:relative;">
+                            <img id="vImg" src="" style="width:100%; height:100%; object-fit:cover; transition: opacity 0.4s;">
+                            <div id="vPlayOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.15);">
+                                <div style="width:70px; height:70px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; box-shadow:0 10px 20px rgba(0,0,0,0.3);">▶</div>
+                            </div>
+                        </div>
+                        <div class="player-ui">
+                            <div id="vToggle" style="cursor:pointer; font-size:20px;">⏸</div>
+                            <div class="progress-bg"><div class="progress-fill" id="vFill"></div></div>
+                            <div id="vInfo" style="font-size:13px; font-weight:600; min-width:50px; text-align:right;">1 / 4</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const media = [{"image": "https://s.coze.cn/t/2O3zI708tJI/", "audio": "https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_07dd457a-1849-4bcb-88c9-b2a2d9e66bb5.mp3?lk3s=da27ec82&x-expires=1777607109&x-signature=PiBwuS0qLCTu%2BTQw%2BThLJ4mJEFo%3D"}, {"image": "https://s.coze.cn/t/DZoJqn8ytV0/", "audio": "https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_c5c0cc4f-a770-4bce-8f92-ddeb446b5761.mp3?lk3s=da27ec82&x-expires=1777607109&x-signature=vgfaskR0aQAcalZz0kbEbGMiSqs%3D"}, {"image": "https://s.coze.cn/t/ZElDw6IdnF8/", "audio": "https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_d8a7205c-a9a5-4057-9127-097b1e4c363c.mp3?lk3s=da27ec82&x-expires=1777607109&x-signature=%2B3mAqsQ5oL459m3sznCJQVNLDic%3D"}, {"image": "https://s.coze.cn/t/26-AKlfo84Y/", "audio": "https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_662df87a-2b43-4e7e-959d-d0049892af8e.mp3?lk3s=da27ec82&x-expires=1777607109&x-signature=v3fN%2B9nOqTAYoszPg8wakkOcC2g%3D"}];
+        let curIdx = 0;
+        let isPlaying = false;
+        const audio = document.getElementById('vAudio');
+        const img = document.getElementById('vImg');
+        const fill = document.getElementById('vFill');
+
+        // Tab切换
+        document.querySelectorAll('.nav-tab').forEach(t => {
+            t.onclick = () => {
+                document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                document.querySelectorAll('.content-pane').forEach(p => p.classList.remove('active'));
+                document.getElementById(t.dataset.tab).classList.add('active');
+                window.scrollTo({top:0});
+            }
+        });
+
+        // 侧边栏联动
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.onclick = () => {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                const idx = parseInt(item.dataset.index);
+                const activeTab = document.querySelector('.content-pane.active').id;
+                
+                if(activeTab === 'slides') {
+                    loadMedia(idx); play(true);
+                } else {
+                    const target = document.getElementById(`${activeTab}-sec-${idx}`);
+                    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+                }
+            }
+        });
+
+        function loadMedia(i) {
+            curIdx = i;
+            img.style.opacity = 0;
+            setTimeout(() => { img.src = media[i].image; img.style.opacity = 1; }, 200);
+            audio.src = media[i].audio;
+            document.getElementById('vInfo').innerText = `${i+1} / ${media.length}`;
+            if(isPlaying) audio.play();
+        }
+
+        function play(force) {
+            if(force || audio.paused) { 
+                audio.play(); isPlaying = true; 
+                document.getElementById('vPlayOverlay').style.display='none';
+                document.getElementById('vToggle').innerText='⏸';
+            } else { 
+                audio.pause(); isPlaying = false; 
+                document.getElementById('vPlayOverlay').style.display='flex';
+                document.getElementById('vToggle').innerText='▶';
+            }
+        }
+
+        document.getElementById('vViewport').onclick = () => play();
+        document.getElementById('vToggle').onclick = () => play();
+        audio.ontimeupdate = () => fill.style.width = (audio.currentTime/audio.duration*100)+'%';
+        audio.onended = () => { if(curIdx < media.length - 1) loadMedia(curIdx+1); else isPlaying=false; };
+
+        if(media.length > 0) loadMedia(0);
+    </script>
+</body>
+</html>
