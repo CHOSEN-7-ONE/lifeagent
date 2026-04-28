@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人与企业交税办理全指南</title>
+    <style>
+        :root {
+            --bg-body: #F8FAFC;
+            --bg-surface: #FFFFFF;
+            --primary: #4F46E5;
+            --primary-light: #EEF2FF;
+            --text-main: #0F172A;
+            --text-sub: #64748B;
+            --border-color: #E2E8F0;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --sidebar-width: 280px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, "PingFang SC", sans-serif; 
+            background: var(--bg-body);
+            color: var(--text-main); 
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header 头部 */
+        header.top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+        .page-tag { background: var(--bg-body); padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; color: var(--text-sub); border: 1px solid var(--border-color); }
+
+        /* 核心改进：导航栏 Grid 对齐 */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            background: #FDFDFF;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .nav-left-blank {
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding-left: 32px;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 12px 40px;
+            align-items: center;
+        }
+        .nav-tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid transparent;
+        }
+        .nav-tab:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-tab.active { 
+            background: var(--primary); 
+            color: white; 
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* 主体内容 Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            min-height: 750px;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            background: #FAFBFE;
+            padding: 40px 24px;
+            border-right: 1px solid var(--border-color);
+        }
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border-radius: 14px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .sidebar-item:hover { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transform: translateX(4px); }
+        .sidebar-item.active { background: white; border-color: var(--border-color); box-shadow: var(--shadow); }
+        .dot { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid var(--border-color); transition: 0.3s; }
+        .sidebar-item.active .dot { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        .sidebar-title { font-size: 0.9rem; font-weight: 500; color: var(--text-sub); transition: 0.2s; }
+        .sidebar-item.active .sidebar-title { color: var(--text-main); font-weight: 700; }
+
+        /* 内容区 */
+        .main-content { padding: 50px 60px; }
+        .content-pane { display: none; animation: fadeIn 0.5s ease; }
+        .content-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 2.4rem; font-weight: 850; margin-bottom: 40px; letter-spacing: -1px; }
+        .section-header { margin: 48px 0 24px; display: flex; align-items: center; gap: 12px; scroll-margin-top: 40px; }
+        .section-header h2 { font-size: 1.5rem; font-weight: 800; }
+        .section-header::before { content: ""; width: 6px; height: 24px; background: var(--primary); border-radius: 10px; }
+
+        .info-card {
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            padding: 22px 26px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 16px;
+            transition: 0.3s;
+        }
+        .info-card:hover { background: white; border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow); }
+        .info-card p { line-height: 1.7; font-size: 1.05rem; }
+
+        .media-img { width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow); margin: 20px 0; }
+        
+        /* 播放器 */
+        .player-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .player-ui { position: absolute; bottom: 0; width: 100%; height: 64px; background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); display: flex; align-items: center; padding: 0 24px; gap: 20px; color: white; }
+        .progress-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; position: relative; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 10px; width: 0%; }
+
+        @media (max-width: 900px) {
+            .nav-grid, .content-grid { grid-template-columns: 1fr; }
+            .nav-left-blank, .sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="top-bar">
+            <div class="logo">生活百科 Agent</div>
+            <div class="page-tag">个人与企业交税办理全指南</div>
+        </header>
+
+        <!-- 修正后的对齐导航栏 -->
+        <div class="nav-grid">
+            <div class="nav-left-blank">导航目录</div>
+            <nav class="nav-tabs">
+                <div class="nav-tab active" data-tab="text">📝 核心方案</div>
+                <div class="nav-tab" data-tab="mindmap">🖼️ 视觉图解</div>
+                <div class="nav-tab" data-tab="audio">🎙️ 专家音频</div>
+                <div class="nav-tab" data-tab="slides">🎥 沉浸演示</div>
+            </nav>
+        </div>
+
+        <div class="content-grid">
+            <aside class="sidebar"><div class="sidebar-item active" data-index="0"><div class="dot"></div><div class="sidebar-title">交税前置准备材料</div></div><div class="sidebar-item " data-index="1"><div class="dot"></div><div class="sidebar-title">线上交税办理步骤</div></div><div class="sidebar-item " data-index="2"><div class="dot"></div><div class="sidebar-title">线下交税办理流程</div></div><div class="sidebar-item " data-index="3"><div class="dot"></div><div class="sidebar-title">交税常见注意事项</div></div></aside>
+            <main class="main-content">
+                <div id="text" class="content-pane active">
+                    <h1>个人与企业交税办理全指南</h1>
+                    <div class="section-header" id="text-sec-0"><h2>交税前置准备材料</h2></div><div class="info-card"><p>个人交税：本人身份证号、收入明细、专项附加扣除凭证</p></div><div class="info-card"><p>企业交税：营业执照、营收报表、公章、进项抵扣发票</p></div><div class="info-card"><p>线下办理额外带：银行卡、经办人身份证原件</p></div><div class="section-header" id="text-sec-1"><h2>线上交税办理步骤</h2></div><div class="info-card"><p>第1步：登录电子税务局/个税APP，完成实名认证登录</p></div><div class="info-card"><p>第2步：进入对应申报页面，填写收入、扣除项等数据</p></div><div class="info-card"><p>第3步：核对系统核算的应缴税额，确认后提交申报</p></div><div class="info-card"><p>第4步：选择支付账户完成缴款，保存电子完税凭证</p></div><div class="section-header" id="text-sec-2"><h2>线下交税办理流程</h2></div><div class="info-card"><p>第1步：带齐材料前往所属地政务中心税务窗口</p></div><div class="info-card"><p>第2步：取号后提交材料，填写纸质纳税申报表</p></div><div class="info-card"><p>第3步：工作人员核对核算税款，现场完成缴费</p></div><div class="info-card"><p>第4步：领取纸质完税证明，完成全部办理</p></div><div class="section-header" id="text-sec-3"><h2>交税常见注意事项</h2></div><div class="info-card"><p>必须在法定征期内完成申报，逾期会产生滞纳金影响征信</p></div><div class="info-card"><p>个税专项附加扣除信息每年需更新，避免多缴错缴</p></div><div class="info-card"><p>不确定要求可拨打12366税务热线提前咨询</p></div>
+                </div>
+                <div id="mindmap" class="content-pane">
+                    <h1>视觉图解</h1>
+                    <div class="section-header" id="mindmap-sec-0"><h2>交税前置准备材料</h2></div><img src="https://s.coze.cn/t/MWHIupDdM2s/" class="media-img"><div class="section-header" id="mindmap-sec-1"><h2>线上交税办理步骤</h2></div><img src="https://s.coze.cn/t/xKgKMV-ysTk/" class="media-img"><div class="section-header" id="mindmap-sec-2"><h2>线下交税办理流程</h2></div><img src="https://s.coze.cn/t/jhEGUZv2Pg8/" class="media-img"><div class="section-header" id="mindmap-sec-3"><h2>交税常见注意事项</h2></div><img src="https://s.coze.cn/t/4AkXE6Agl9E/" class="media-img">
+                </div>
+                <div id="audio" class="content-pane">
+                    <h1>专家音频</h1>
+                    <div class="info-card" id="audio-sec-0"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 交税前置准备材料</div><audio controls style="width:100%"><source src="https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_de26e5e6-a13b-4ad9-9137-b6e1965ff066.mp3?lk3s=da27ec82&amp;x-expires=1777608433&amp;x-signature=%2BGEy%2BzEIDl%2FxRGdv44K94JxYvBQ%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-1"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 线上交税办理步骤</div><audio controls style="width:100%"><source src="https://lf6-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_2ad3a6cf-94e9-4a9b-aca8-a4d9e36ad86e.mp3?lk3s=da27ec82&amp;x-expires=1777608430&amp;x-signature=sAGzTg2jvxNFWKeLUiGFYG2nQ2Q%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-2"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 线下交税办理流程</div><audio controls style="width:100%"><source src="https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_22c792c0-c606-4a9f-b5f1-2bc5de4d16d4.mp3?lk3s=da27ec82&amp;x-expires=1777608429&amp;x-signature=4CiyRSUniJUqjOXsXXVe45jsZKU%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-3"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 交税常见注意事项</div><audio controls style="width:100%"><source src="https://lf6-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_2e4a3c93-9261-4bea-8d3b-3bba8cb2b8e3.mp3?lk3s=da27ec82&amp;x-expires=1777608430&amp;x-signature=Ct8i%2FP2Bbj6Kg%2F2vvKhhnTev%2BKY%3D" type="audio/mpeg"></audio></div>
+                </div>
+                <div id="slides" class="content-pane">
+                    <h1>影音沉浸演示</h1>
+                    <div class="player-wrap">
+                        <audio id="vAudio"></audio>
+                        <div id="vViewport" style="width:100%; height:100%; cursor:pointer; position:relative;">
+                            <img id="vImg" src="" style="width:100%; height:100%; object-fit:cover; transition: opacity 0.4s;">
+                            <div id="vPlayOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.15);">
+                                <div style="width:70px; height:70px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; box-shadow:0 10px 20px rgba(0,0,0,0.3);">▶</div>
+                            </div>
+                        </div>
+                        <div class="player-ui">
+                            <div id="vToggle" style="cursor:pointer; font-size:20px;">⏸</div>
+                            <div class="progress-bg"><div class="progress-fill" id="vFill"></div></div>
+                            <div id="vInfo" style="font-size:13px; font-weight:600; min-width:50px; text-align:right;">1 / 4</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const media = [{"image": "https://s.coze.cn/t/MWHIupDdM2s/", "audio": "https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_de26e5e6-a13b-4ad9-9137-b6e1965ff066.mp3?lk3s=da27ec82&x-expires=1777608433&x-signature=%2BGEy%2BzEIDl%2FxRGdv44K94JxYvBQ%3D"}, {"image": "https://s.coze.cn/t/xKgKMV-ysTk/", "audio": "https://lf6-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_2ad3a6cf-94e9-4a9b-aca8-a4d9e36ad86e.mp3?lk3s=da27ec82&x-expires=1777608430&x-signature=sAGzTg2jvxNFWKeLUiGFYG2nQ2Q%3D"}, {"image": "https://s.coze.cn/t/jhEGUZv2Pg8/", "audio": "https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_22c792c0-c606-4a9f-b5f1-2bc5de4d16d4.mp3?lk3s=da27ec82&x-expires=1777608429&x-signature=4CiyRSUniJUqjOXsXXVe45jsZKU%3D"}, {"image": "https://s.coze.cn/t/4AkXE6Agl9E/", "audio": "https://lf6-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_2e4a3c93-9261-4bea-8d3b-3bba8cb2b8e3.mp3?lk3s=da27ec82&x-expires=1777608430&x-signature=Ct8i%2FP2Bbj6Kg%2F2vvKhhnTev%2BKY%3D"}];
+        let curIdx = 0;
+        let isPlaying = false;
+        const audio = document.getElementById('vAudio');
+        const img = document.getElementById('vImg');
+        const fill = document.getElementById('vFill');
+
+        // Tab切换
+        document.querySelectorAll('.nav-tab').forEach(t => {
+            t.onclick = () => {
+                document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                document.querySelectorAll('.content-pane').forEach(p => p.classList.remove('active'));
+                document.getElementById(t.dataset.tab).classList.add('active');
+                window.scrollTo({top:0});
+            }
+        });
+
+        // 侧边栏联动
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.onclick = () => {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                const idx = parseInt(item.dataset.index);
+                const activeTab = document.querySelector('.content-pane.active').id;
+                
+                if(activeTab === 'slides') {
+                    loadMedia(idx); play(true);
+                } else {
+                    const target = document.getElementById(`${activeTab}-sec-${idx}`);
+                    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+                }
+            }
+        });
+
+        function loadMedia(i) {
+            curIdx = i;
+            img.style.opacity = 0;
+            setTimeout(() => { img.src = media[i].image; img.style.opacity = 1; }, 200);
+            audio.src = media[i].audio;
+            document.getElementById('vInfo').innerText = `${i+1} / ${media.length}`;
+            if(isPlaying) audio.play();
+        }
+
+        function play(force) {
+            if(force || audio.paused) { 
+                audio.play(); isPlaying = true; 
+                document.getElementById('vPlayOverlay').style.display='none';
+                document.getElementById('vToggle').innerText='⏸';
+            } else { 
+                audio.pause(); isPlaying = false; 
+                document.getElementById('vPlayOverlay').style.display='flex';
+                document.getElementById('vToggle').innerText='▶';
+            }
+        }
+
+        document.getElementById('vViewport').onclick = () => play();
+        document.getElementById('vToggle').onclick = () => play();
+        audio.ontimeupdate = () => fill.style.width = (audio.currentTime/audio.duration*100)+'%';
+        audio.onended = () => { if(curIdx < media.length - 1) loadMedia(curIdx+1); else isPlaying=false; };
+
+        if(media.length > 0) loadMedia(0);
+    </script>
+</body>
+</html>
