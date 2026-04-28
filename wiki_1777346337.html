@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>从零开咖啡馆创业全指南</title>
+    <style>
+        :root {
+            --bg-body: #F8FAFC;
+            --bg-surface: #FFFFFF;
+            --primary: #4F46E5;
+            --primary-light: #EEF2FF;
+            --text-main: #0F172A;
+            --text-sub: #64748B;
+            --border-color: #E2E8F0;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --sidebar-width: 280px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, "PingFang SC", sans-serif; 
+            background: var(--bg-body);
+            color: var(--text-main); 
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header 头部 */
+        header.top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+        .page-tag { background: var(--bg-body); padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; color: var(--text-sub); border: 1px solid var(--border-color); }
+
+        /* 核心改进：导航栏 Grid 对齐 */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            background: #FDFDFF;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .nav-left-blank {
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding-left: 32px;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 12px 40px;
+            align-items: center;
+        }
+        .nav-tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid transparent;
+        }
+        .nav-tab:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-tab.active { 
+            background: var(--primary); 
+            color: white; 
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* 主体内容 Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            min-height: 750px;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            background: #FAFBFE;
+            padding: 40px 24px;
+            border-right: 1px solid var(--border-color);
+        }
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border-radius: 14px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .sidebar-item:hover { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transform: translateX(4px); }
+        .sidebar-item.active { background: white; border-color: var(--border-color); box-shadow: var(--shadow); }
+        .dot { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid var(--border-color); transition: 0.3s; }
+        .sidebar-item.active .dot { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        .sidebar-title { font-size: 0.9rem; font-weight: 500; color: var(--text-sub); transition: 0.2s; }
+        .sidebar-item.active .sidebar-title { color: var(--text-main); font-weight: 700; }
+
+        /* 内容区 */
+        .main-content { padding: 50px 60px; }
+        .content-pane { display: none; animation: fadeIn 0.5s ease; }
+        .content-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 2.4rem; font-weight: 850; margin-bottom: 40px; letter-spacing: -1px; }
+        .section-header { margin: 48px 0 24px; display: flex; align-items: center; gap: 12px; scroll-margin-top: 40px; }
+        .section-header h2 { font-size: 1.5rem; font-weight: 800; }
+        .section-header::before { content: ""; width: 6px; height: 24px; background: var(--primary); border-radius: 10px; }
+
+        .info-card {
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            padding: 22px 26px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 16px;
+            transition: 0.3s;
+        }
+        .info-card:hover { background: white; border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow); }
+        .info-card p { line-height: 1.7; font-size: 1.05rem; }
+
+        .media-img { width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow); margin: 20px 0; }
+        
+        /* 播放器 */
+        .player-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .player-ui { position: absolute; bottom: 0; width: 100%; height: 64px; background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); display: flex; align-items: center; padding: 0 24px; gap: 20px; color: white; }
+        .progress-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; position: relative; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 10px; width: 0%; }
+
+        @media (max-width: 900px) {
+            .nav-grid, .content-grid { grid-template-columns: 1fr; }
+            .nav-left-blank, .sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="top-bar">
+            <div class="logo">生活百科 Agent</div>
+            <div class="page-tag">从零开咖啡馆创业全指南</div>
+        </header>
+
+        <!-- 修正后的对齐导航栏 -->
+        <div class="nav-grid">
+            <div class="nav-left-blank">导航目录</div>
+            <nav class="nav-tabs">
+                <div class="nav-tab active" data-tab="text">📝 核心方案</div>
+                <div class="nav-tab" data-tab="mindmap">🖼️ 视觉图解</div>
+                <div class="nav-tab" data-tab="audio">🎙️ 专家音频</div>
+                <div class="nav-tab" data-tab="slides">🎥 沉浸演示</div>
+            </nav>
+        </div>
+
+        <div class="content-grid">
+            <aside class="sidebar"><div class="sidebar-item active" data-index="0"><div class="dot"></div><div class="sidebar-title">前期筹备与资质清单</div></div><div class="sidebar-item " data-index="1"><div class="dot"></div><div class="sidebar-title">开店核心流程步骤</div></div><div class="sidebar-item " data-index="2"><div class="dot"></div><div class="sidebar-title">产品设计与运营方案</div></div><div class="sidebar-item " data-index="3"><div class="dot"></div><div class="sidebar-title">常见创业踩坑误区</div></div></aside>
+            <main class="main-content">
+                <div id="text" class="content-pane active">
+                    <h1>从零开咖啡馆创业全指南</h1>
+                    <div class="section-header" id="text-sec-0"><h2>前期筹备与资质清单</h2></div><div class="info-card"><p>启动资金：小型社区店15-30万，核心商圈店50-100万</p></div><div class="info-card"><p>必备资质：营业执照、食品经营许可证、卫生许可证、消防审批</p></div><div class="info-card"><p>选址要求：优先写字楼/社区出入口，面积20-60平适配多数定位</p></div><div class="info-card"><p>核心设备：意式咖啡机、磨豆机、冷藏柜，总投入约3-8万</p></div><div class="section-header" id="text-sec-1"><h2>开店核心流程步骤</h2></div><div class="info-card"><p>第1步：确定店铺定位，锁定目标客群（上班族/社区居民等）</p></div><div class="info-card"><p>第2步：签约租铺，完成装修，划分操作区、客座区功能空间</p></div><div class="info-card"><p>第3步：对接供应商，采购设备与生豆，调试产品风味</p></div><div class="info-card"><p>第4步：招聘培训员工，10-30平门店配置2-3名咖啡师即可</p></div><div class="info-card"><p>第5步：试营业1-2周，收集顾客反馈调整产品与定价</p></div><div class="section-header" id="text-sec-2"><h2>产品设计与运营方案</h2></div><div class="info-card"><p>产品结构：核心咖啡占60%，搭配甜点简餐占40%，SKU控制20-30款</p></div><div class="info-card"><p>定价策略：大众店美式15-22元、拿铁22-30元，精品店上浮30%-50%</p></div><div class="info-card"><p>获客运营：开业前3天5折引流，上线本地团购，建会员社群促复购</p></div><div class="section-header" id="text-sec-3"><h2>常见创业踩坑误区</h2></div><div class="info-card"><p>房租坑：不要选月租金超预估月流水30%的店铺，极易入不敷出</p></div><div class="info-card"><p>装修坑：装修成本不要超总预算30%，避免后期资金周转不开</p></div><div class="info-card"><p>备货坑：咖啡豆保质期短，初期单次备货不超2周，避免风味流失</p></div><div class="info-card"><p>宣传坑：开业前1-2周要做周边预热，不要冷启动无人知晓</p></div>
+                </div>
+                <div id="mindmap" class="content-pane">
+                    <h1>视觉图解</h1>
+                    <div class="section-header" id="mindmap-sec-0"><h2>前期筹备与资质清单</h2></div><img src="https://s.coze.cn/t/ileb38bqmU4/" class="media-img"><div class="section-header" id="mindmap-sec-1"><h2>开店核心流程步骤</h2></div><img src="https://s.coze.cn/t/faNTzYb8wtQ/" class="media-img"><div class="section-header" id="mindmap-sec-2"><h2>产品设计与运营方案</h2></div><img src="https://s.coze.cn/t/xjCWfJybAco/" class="media-img"><div class="section-header" id="mindmap-sec-3"><h2>常见创业踩坑误区</h2></div><img src="https://s.coze.cn/t/1rXs4rLkI04/" class="media-img">
+                </div>
+                <div id="audio" class="content-pane">
+                    <h1>专家音频</h1>
+                    <div class="info-card" id="audio-sec-0"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 前期筹备与资质清单</div><audio controls style="width:100%"><source src="https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_1d766f89-86b0-43f5-a781-dbafb0e2661f.mp3?lk3s=da27ec82&amp;x-expires=1777605536&amp;x-signature=jwRPwsKAX8M7m84qMNzxr1dgnko%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-1"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 开店核心流程步骤</div><audio controls style="width:100%"><source src="https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_66a6a3a5-27f4-4988-9687-60ad530d495e.mp3?lk3s=da27ec82&amp;x-expires=1777605534&amp;x-signature=SfxfZ0aix3KNCO0ikR0%2FeTsO5Uo%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-2"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 产品设计与运营方案</div><audio controls style="width:100%"><source src="https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_d5fec28b-1714-4447-9fbb-e50521c4fa89.mp3?lk3s=da27ec82&amp;x-expires=1777605534&amp;x-signature=O0oX%2Fbd4n%2F4%2BWiIbUCouOpl4T74%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-3"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 常见创业踩坑误区</div><audio controls style="width:100%"><source src="https://lf9-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_a16ee205-11db-4663-9951-fee01f3f581a.mp3?lk3s=da27ec82&amp;x-expires=1777605537&amp;x-signature=hHZhsGcn0U%2FYfTAySOzgIXysIQI%3D" type="audio/mpeg"></audio></div>
+                </div>
+                <div id="slides" class="content-pane">
+                    <h1>影音沉浸演示</h1>
+                    <div class="player-wrap">
+                        <audio id="vAudio"></audio>
+                        <div id="vViewport" style="width:100%; height:100%; cursor:pointer; position:relative;">
+                            <img id="vImg" src="" style="width:100%; height:100%; object-fit:cover; transition: opacity 0.4s;">
+                            <div id="vPlayOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.15);">
+                                <div style="width:70px; height:70px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; box-shadow:0 10px 20px rgba(0,0,0,0.3);">▶</div>
+                            </div>
+                        </div>
+                        <div class="player-ui">
+                            <div id="vToggle" style="cursor:pointer; font-size:20px;">⏸</div>
+                            <div class="progress-bg"><div class="progress-fill" id="vFill"></div></div>
+                            <div id="vInfo" style="font-size:13px; font-weight:600; min-width:50px; text-align:right;">1 / 4</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const media = [{"image": "https://s.coze.cn/t/ileb38bqmU4/", "audio": "https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_1d766f89-86b0-43f5-a781-dbafb0e2661f.mp3?lk3s=da27ec82&x-expires=1777605536&x-signature=jwRPwsKAX8M7m84qMNzxr1dgnko%3D"}, {"image": "https://s.coze.cn/t/faNTzYb8wtQ/", "audio": "https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_66a6a3a5-27f4-4988-9687-60ad530d495e.mp3?lk3s=da27ec82&x-expires=1777605534&x-signature=SfxfZ0aix3KNCO0ikR0%2FeTsO5Uo%3D"}, {"image": "https://s.coze.cn/t/xjCWfJybAco/", "audio": "https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_d5fec28b-1714-4447-9fbb-e50521c4fa89.mp3?lk3s=da27ec82&x-expires=1777605534&x-signature=O0oX%2Fbd4n%2F4%2BWiIbUCouOpl4T74%3D"}, {"image": "https://s.coze.cn/t/1rXs4rLkI04/", "audio": "https://lf9-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_a16ee205-11db-4663-9951-fee01f3f581a.mp3?lk3s=da27ec82&x-expires=1777605537&x-signature=hHZhsGcn0U%2FYfTAySOzgIXysIQI%3D"}];
+        let curIdx = 0;
+        let isPlaying = false;
+        const audio = document.getElementById('vAudio');
+        const img = document.getElementById('vImg');
+        const fill = document.getElementById('vFill');
+
+        // Tab切换
+        document.querySelectorAll('.nav-tab').forEach(t => {
+            t.onclick = () => {
+                document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                document.querySelectorAll('.content-pane').forEach(p => p.classList.remove('active'));
+                document.getElementById(t.dataset.tab).classList.add('active');
+                window.scrollTo({top:0});
+            }
+        });
+
+        // 侧边栏联动
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.onclick = () => {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                const idx = parseInt(item.dataset.index);
+                const activeTab = document.querySelector('.content-pane.active').id;
+                
+                if(activeTab === 'slides') {
+                    loadMedia(idx); play(true);
+                } else {
+                    const target = document.getElementById(`${activeTab}-sec-${idx}`);
+                    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+                }
+            }
+        });
+
+        function loadMedia(i) {
+            curIdx = i;
+            img.style.opacity = 0;
+            setTimeout(() => { img.src = media[i].image; img.style.opacity = 1; }, 200);
+            audio.src = media[i].audio;
+            document.getElementById('vInfo').innerText = `${i+1} / ${media.length}`;
+            if(isPlaying) audio.play();
+        }
+
+        function play(force) {
+            if(force || audio.paused) { 
+                audio.play(); isPlaying = true; 
+                document.getElementById('vPlayOverlay').style.display='none';
+                document.getElementById('vToggle').innerText='⏸';
+            } else { 
+                audio.pause(); isPlaying = false; 
+                document.getElementById('vPlayOverlay').style.display='flex';
+                document.getElementById('vToggle').innerText='▶';
+            }
+        }
+
+        document.getElementById('vViewport').onclick = () => play();
+        document.getElementById('vToggle').onclick = () => play();
+        audio.ontimeupdate = () => fill.style.width = (audio.currentTime/audio.duration*100)+'%';
+        audio.onended = () => { if(curIdx < media.length - 1) loadMedia(curIdx+1); else isPlaying=false; };
+
+        if(media.length > 0) loadMedia(0);
+    </script>
+</body>
+</html>
