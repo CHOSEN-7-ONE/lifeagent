@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>半自动咖啡机深度清洁保养教程</title> 
+    <style>
+        :root {
+            --bg-body: #F8FAFC;
+            --bg-surface: #FFFFFF;
+            --primary: #4F46E5;
+            --primary-light: #EEF2FF;
+            --text-main: #0F172A;
+            --text-sub: #64748B;
+            --border-color: #E2E8F0;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --sidebar-width: 280px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, "PingFang SC", sans-serif; 
+            background: var(--bg-body);
+            color: var(--text-main); 
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 80vh;
+        }
+
+        .content-grid { display: grid; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100%; }
+
+        .sidebar { background: #FAFBFE; padding: 40px 24px; border-right: 1px solid var(--border-color); }
+        .sidebar-item { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 14px; cursor: pointer; margin-bottom: 10px; transition: all 0.2s; border: 1px solid transparent; }
+        .sidebar-item:hover { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transform: translateX(4px); }
+        .sidebar-item.active { background: white; border-color: var(--border-color); box-shadow: var(--shadow); }
+        .dot { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid var(--border-color); transition: 0.3s; }
+        .sidebar-item.active .dot { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        .sidebar-title { font-size: 0.9rem; font-weight: 500; color: var(--text-sub); transition: 0.2s; }
+        .sidebar-item.active .sidebar-title { color: var(--text-main); font-weight: 700; }
+
+        .main-content { padding: 50px 60px; }
+
+        h1 { font-size: 2.4rem; font-weight: 850; margin-bottom: 12px; letter-spacing: -1px; }
+        .page-desc { font-size: 1.1rem; color: var(--text-sub); margin-bottom: 40px; }
+        
+        .section-header { margin: 48px 0 24px; display: flex; align-items: center; gap: 12px; scroll-margin-top: 40px; }
+        .section-header h2 { font-size: 1.5rem; font-weight: 800; }
+        .section-header::before { content: ""; width: 6px; height: 24px; background: var(--primary); border-radius: 10px; }
+        
+        .info-card { background: #F8FAFC; border: 1px solid var(--border-color); padding: 22px 26px; border-radius: var(--radius-lg); margin-bottom: 16px; transition: 0.3s; }
+        .info-card:hover { background: white; border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow); }
+        .info-card p { line-height: 1.7; font-size: 1.05rem; }
+        
+        .media-img { width: 100%; max-height: 500px; object-fit: cover; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow); margin: 20px 0; transition: transform 0.3s; }
+        .media-img:hover { transform: scale(1.02); }
+
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .main-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="content-grid">
+            <aside class="sidebar"><div class="sidebar-item active" data-index="0"><div class="dot"></div><div class="sidebar-title">定期清洁的必要性</div></div><div class="sidebar-item " data-index="1"><div class="dot"></div><div class="sidebar-title">清洁前准备工作</div></div><div class="sidebar-item " data-index="2"><div class="dot"></div><div class="sidebar-title">核心步骤：冲煮头反冲洗</div></div><div class="sidebar-item " data-index="3"><div class="dot"></div><div class="sidebar-title">蒸汽棒与可拆卸配件清洁</div></div><div class="sidebar-item " data-index="4"><div class="dot"></div><div class="sidebar-title">日常保养避坑建议</div></div></aside>
+            
+            <main class="main-content">
+                <h1>半自动咖啡机深度清洁保养教程</h1>
+                <p class="page-desc">讲解半自动咖啡机深度清洁方法与保养要点，保障咖啡风味，延长机器寿命。</p>
+                <div class="section-header" id="sec-0"><h2>定期清洁的必要性</h2></div><div class="info-card"><p>咖啡机长期只用不洗，会严重影响咖啡萃取风味，残留的油脂和水垢还会滋生细菌，甚至导致机器管路堵塞。</p></div><div class="info-card"><p>为了保证每一杯咖啡的品质，半自动咖啡机的定期深度清洁必不可少。</p></div><img src="https://s.coze.cn/t/puoMGSHYKBc/" class="media-img" alt="定期清洁的必要性 配图"><div class="section-header" id="sec-1"><h2>清洁前准备工作</h2></div><div class="info-card"><p>开始深度清洁前，需要准备好专业意式咖啡机清洁粉（或清洁药片）、匹配手柄尺寸的盲碗、带挡水片的专用清洁刷以及干净的微纤维毛巾。</p></div><div class="info-card"><p>准备齐全工具后，需要确认咖啡机水箱内装有充足的清水。</p></div><img src="https://s.coze.cn/t/YTAzMdRRkVo/" class="media-img" alt="清洁前准备工作 配图"><div class="section-header" id="sec-2"><h2>核心步骤：冲煮头反冲洗</h2></div><div class="info-card"><p>先卸下冲煮头的分水网，用清洁刷仔细刷除卡槽内残留的咖啡渣，随后将手柄原有粉碗更换为盲碗，放入约3克清洁粉后扣入冲煮头。</p></div><div class="info-card"><p>开启冲煮键运行10秒后关闭静置10秒，重复该动作5次，利用反向水压清洁内部泄压管路；结束后倒掉污水，换清水再反冲洗5次直到无白色泡沫即可。</p></div><img src="https://s.coze.cn/t/M9QUVt5fGKQ/" class="media-img" alt="核心步骤：冲煮头反冲洗 配图"><div class="section-header" id="sec-3"><h2>蒸汽棒与可拆卸配件清洁</h2></div><div class="info-card"><p>将蒸汽棒完全浸泡在添加了专用清洁液的热水中，开启蒸汽喷发5秒后关闭，静置15分钟软化顽固奶垢，最后用湿毛巾擦拭干净即可。</p></div><div class="info-card"><p>同时取下接水盘、冲煮手柄下半部分等可拆卸部件，放在温水中配合洗洁精彻底冲洗干净并擦干，注意手柄不要泡水。</p></div><img src="https://s.coze.cn/t/4qgf7Dsg3gs/" class="media-img" alt="蒸汽棒与可拆卸配件清洁 配图"><div class="section-header" id="sec-4"><h2>日常保养避坑建议</h2></div><div class="info-card"><p>深度清洁建议每制作100杯咖啡或者每个月进行一次。</p></div><div class="info-card"><p>日常使用中，每次萃取完咖啡要空放两秒热水冲洗冲煮头并扫掉残渣；打发完牛奶后立刻擦拭蒸汽棒并空喷一次，防止牛奶倒吸，好习惯可大大延长咖啡机使用寿命。</p></div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏平滑滚动联动
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.onclick = () => {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                const idx = parseInt(item.dataset.index);
+                const target = document.getElementById(`sec-${idx}`);
+                if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+            }
+        });
+    </script>
+</body>
+</html>
