@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>半自动咖啡机深度清洁保养教程</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #F8F9FA;
+            --bg-surface: #FFFFFF;
+            --text-primary: #121214;
+            --text-secondary: #65656E;
+            --accent: #4F46E5;
+            --accent-light: rgba(79, 70, 229, 0.04);
+            --border-subtle: rgba(0, 0, 0, 0.04);
+            
+            /* 高端超弥散立体阴影 */
+            --shadow-premium: 0 30px 60px -15px rgba(0, 0, 0, 0.05), 0 15px 30px -10px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 50px 80px -20px rgba(79, 70, 229, 0.12), 0 20px 40px -15px rgba(0, 0, 0, 0.06);
+            
+            --radius-card: 20px;
+            --transition-bounce: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-base);
+            /* 细腻的高级几何底纹，打破单调留白 */
+            background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            color: var(--text-primary); 
+            overflow-x: hidden;
+        }
+
+        /* 1. 顶部交互式智能滚动进度条 */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            width: 0%; height: 4px;
+            background: linear-gradient(90deg, #4F46E5, #818CF8);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* 2. 精简紧凑版首屏 (Hero Section) */
+        .hero {
+            padding: 100px 0 60px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero .engine-tag {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--bg-surface);
+            border-radius: 100px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .hero h1 { 
+            font-size: clamp(2.5rem, 4.5vw, 4rem);
+            font-weight: 800; 
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .hero p.page-desc { 
+            font-size: 1.2rem;
+            color: var(--text-secondary); 
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* 3. 核心交替图文排版区 (优化间距与动态进入效果) */
+        .features { padding: 40px 0 100px; }
+        
+        /* 视差滚动展现基础样式 */
+        .section-block { 
+            margin-bottom: 100px; 
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            transition: var(--transition-bounce);
+        }
+        
+        /* 触发进入动画后的激活状态 */
+        .section-block.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .section-block:last-child { margin-bottom: 0; }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        /* 左右交替结构 */
+        .block-odd .section-media { grid-column: 2; }
+        .block-odd .section-text { grid-column: 1; }
+        .block-even .section-media { grid-column: 1; }
+        .block-even .section-text { grid-column: 2; }
+
+        /* 文字展现区交互：悬停整体产生向上的呼吸感 */
+        .section-text {
+            transition: var(--transition-bounce);
+        }
+        
+        .section-text h2 { 
+            font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+            font-weight: 700; 
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        
+        .points-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        /* 段落微卡片化设计，增强悬停时的动态回馈 */
+        .point-paragraph { 
+            font-size: 1.08rem; 
+            color: var(--text-secondary); 
+            line-height: 1.65;
+            font-weight: 400;
+            padding: 14px 20px;
+            border-left: 3px solid transparent;
+            transition: var(--transition-bounce);
+        }
+        
+        .section-block:hover .point-paragraph {
+            border-left-color: var(--accent);
+            background: var(--bg-surface);
+            border-radius: 0 var(--radius-card) var(--radius-card) 0;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-premium);
+            transform: translateX(4px);
+        }
+
+        /* 4. 高端影像卡片交互设计 */
+        .section-media {
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            box-shadow: var(--shadow-premium);
+            background-color: var(--bg-surface);
+            transition: var(--transition-bounce);
+            border: 1px solid var(--border-subtle);
+            position: relative;
+        }
+        
+        /* 悬停时深度阴影扩散、整体上浮，图片自动产生细腻反差变化 */
+        .section-media:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(79, 70, 229, 0.2);
+        }
+        
+        .media-img { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            object-fit: cover;
+            transition: var(--transition-bounce);
+        }
+        
+        .no-media-placeholder {
+            height: 300px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            background: #EAEAEA;
+        }
+        
+        /* 简约高质感底部 */
+        footer {
+            padding: 50px 0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-surface);
+        }
+
+        /* 移动端完美响应式压缩 */
+        @media (max-width: 900px) {
+            .hero { padding: 60px 0 40px; }
+            .section-grid { grid-template-columns: 1fr; gap: 40px; }
+            .block-odd .section-media, .block-odd .section-text,
+            .block-even .section-media, .block-even .section-text { grid-column: 1; }
+            .section-block { margin-bottom: 60px; }
+            .container { padding: 0 24px; }
+            .point-paragraph { padding: 10px 0; border-left: none; }
+            .section-block:hover .point-paragraph { transform: none; box-shadow: none; background: none; }
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="scroll-progress"></div>
+    
+    <header class="hero container">
+        <div class="engine-tag">Sector 7 Visual Platform</div>
+        <h1>半自动咖啡机深度清洁保养教程</h1>
+        <p class="page-desc">讲解半自动咖啡机深度清洁方法与保养要点，保障咖啡风味，延长机器寿命。</p>
+    </header>
+
+    <main class="features">
+        <div class="container">
+            <div class="section-block block-odd"><div class="section-grid"><div class="section-text"><h2>定期清洁的必要性</h2><div class="points-list"><p class="point-paragraph">咖啡机长期只用不洗，会严重影响咖啡萃取风味，残留的油脂和水垢还会滋生细菌，甚至导致机器管路堵塞。</p><p class="point-paragraph">为了保证每一杯咖啡的品质，半自动咖啡机的定期深度清洁必不可少。</p></div></div><div class="section-media"><img src="https://s.coze.cn/t/puoMGSHYKBc/" class="media-img" alt="定期清洁的必要性"></div></div></div><div class="section-block block-even"><div class="section-grid"><div class="section-text"><h2>清洁前准备工作</h2><div class="points-list"><p class="point-paragraph">开始深度清洁前，需要准备好专业意式咖啡机清洁粉（或清洁药片）、匹配手柄尺寸的盲碗、带挡水片的专用清洁刷以及干净的微纤维毛巾。</p><p class="point-paragraph">准备齐全工具后，需要确认咖啡机水箱内装有充足的清水。</p></div></div><div class="section-media"><img src="https://s.coze.cn/t/YTAzMdRRkVo/" class="media-img" alt="清洁前准备工作"></div></div></div><div class="section-block block-odd"><div class="section-grid"><div class="section-text"><h2>核心步骤：冲煮头反冲洗</h2><div class="points-list"><p class="point-paragraph">先卸下冲煮头的分水网，用清洁刷仔细刷除卡槽内残留的咖啡渣，随后将手柄原有粉碗更换为盲碗，放入约3克清洁粉后扣入冲煮头。</p><p class="point-paragraph">开启冲煮键运行10秒后关闭静置10秒，重复该动作5次，利用反向水压清洁内部泄压管路；结束后倒掉污水，换清水再反冲洗5次直到无白色泡沫即可。</p></div></div><div class="section-media"><img src="https://s.coze.cn/t/M9QUVt5fGKQ/" class="media-img" alt="核心步骤：冲煮头反冲洗"></div></div></div><div class="section-block block-even"><div class="section-grid"><div class="section-text"><h2>蒸汽棒与可拆卸配件清洁</h2><div class="points-list"><p class="point-paragraph">将蒸汽棒完全浸泡在添加了专用清洁液的热水中，开启蒸汽喷发5秒后关闭，静置15分钟软化顽固奶垢，最后用湿毛巾擦拭干净即可。</p><p class="point-paragraph">同时取下接水盘、冲煮手柄下半部分等可拆卸部件，放在温水中配合洗洁精彻底冲洗干净并擦干，注意手柄不要泡水。</p></div></div><div class="section-media"><img src="https://s.coze.cn/t/4qgf7Dsg3gs/" class="media-img" alt="蒸汽棒与可拆卸配件清洁"></div></div></div><div class="section-block block-odd"><div class="section-grid"><div class="section-text"><h2>日常保养避坑建议</h2><div class="points-list"><p class="point-paragraph">深度清洁建议每制作100杯咖啡或者每个月进行一次。</p><p class="point-paragraph">日常使用中，每次萃取完咖啡要空放两秒热水冲洗冲煮头并扫掉残渣；打发完牛奶后立刻擦拭蒸汽棒并空喷一次，防止牛奶倒吸，好习惯可大大延长咖啡机使用寿命。</p></div></div><div class="section-media"><div class="no-media-placeholder">IMAGE PENDING</div></div></div></div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            &copy; 2026 Sector 7 Design Studio | All Rights Reserved
+        </div>
+    </footer>
+
+    <script>
+        // 1. 动效一：交互式阅读进度条计算逻辑
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+        });
+
+        // 2. 动效二：智能高级视差滚动进入观测器 (Intersection Observer)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15 // 当模块进入视口的15%时触发
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    // 触发后即刻停止观测，优化浏览器内存驻留
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // 绑定所有内容卡片块
+        document.querySelectorAll('.section-block').forEach(block => {
+            observer.observe(block);
+        });
+    </script>
+</body>
+</html>
