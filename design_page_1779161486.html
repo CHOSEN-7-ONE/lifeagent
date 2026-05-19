@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>半自动咖啡机深度清洁保养教程</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #F8F9FA;
+            --bg-surface: #FFFFFF;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            
+            --text-primary: #111827;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            
+            --accent: #4F46E5;
+            --accent-light: #EEF2FF;
+            --accent-glow: rgba(79, 70, 229, 0.15);
+            
+            --border-color: rgba(0, 0, 0, 0.05);
+            
+            --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
+            
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-base);
+            /* 元素1：细致的网格背景纸质感 */
+            background-image: 
+                linear-gradient(var(--border-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: var(--text-primary); 
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5vw;
+            position: relative;
+        }
+
+        /* 元素2：极简悬浮顶栏 */
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 70px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5vw;
+            z-index: 100;
+        }
+        
+        .nav-logo { font-weight: 800; font-size: 1.2rem; color: var(--text-primary); letter-spacing: -0.02em; }
+        .nav-logo span { color: var(--accent); }
+        .nav-status { font-size: 0.85rem; font-weight: 600; color: var(--accent); background: var(--accent-light); padding: 6px 14px; border-radius: 100px; }
+
+        /* ==========================================
+           首屏 Hero Section (元素更丰富)
+           ========================================== */
+        .hero {
+            padding: 180px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+        
+        /* 元素3：居中的环境光晕，打破大白墙 */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        .hero h1 { 
+            font-size: clamp(2.8rem, 5vw, 4.2rem);
+            font-weight: 900; 
+            letter-spacing: -0.04em;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .hero p.page-desc { 
+            font-size: 1.15rem;
+            color: var(--text-secondary); 
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+        
+        /* 元素4：数据指标微件 (视觉装饰) */
+        .hero-badges {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        .hero-badge {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .hero-badge::before {
+            content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+        }
+
+        /* ==========================================
+           内容排版 Section
+           ========================================== */
+        .features { padding: 40px 0 120px; }
+        
+        .section-block { 
+            margin-bottom: 140px; 
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 0.8s forwards cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* 元素5：巨型背景数字水印 */
+        .step-number {
+            position: absolute;
+            top: -60px;
+            left: -40px;
+            font-size: 10rem;
+            font-weight: 900;
+            color: rgba(0,0,0,0.03);
+            z-index: 0;
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        /* --- 有图片时的图文网格 --- */
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .block-odd .section-media { grid-column: 2; grid-row: 1; }
+        .block-odd .section-text { grid-column: 1; grid-row: 1; }
+        .block-even .section-media { grid-column: 1; grid-row: 1; }
+        .block-even .section-text { grid-column: 2; grid-row: 1; }
+
+        .section-text {
+            background: var(--bg-surface);
+            padding: 50px 40px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-float);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .section-text h2 { 
+            font-size: 2.2rem;
+            font-weight: 800; 
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            position: relative;
+        }
+        
+        /* 标题下的装饰线 */
+        .section-text h2::after {
+            content: ''; display: block; width: 40px; height: 4px;
+            background: var(--accent); border-radius: 2px; margin-top: 16px;
+        }
+        
+        .point-paragraph { 
+            font-size: 1.05rem; 
+            color: var(--text-secondary); 
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
+        }
+        .point-paragraph:last-child { margin-bottom: 0; }
+
+        .section-media {
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            border: 8px solid var(--bg-surface); /* 拍立得相框感 */
+            transition: var(--transition);
+        }
+        
+        .section-media:hover { transform: translateY(-10px) rotate(-1deg); box-shadow: var(--shadow-float); }
+        .media-img { width: 100%; height: auto; display: block; object-fit: cover; }
+
+        /* --- 无图片时的纯文字高亮排版 (告别空白) --- */
+        .section-text-only {
+            position: relative;
+            z-index: 1;
+            background: var(--bg-surface);
+            padding: 80px 60px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-float);
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            border-top: 6px solid var(--accent);
+        }
+        
+        .section-text-only h2 {
+            font-size: 2.4rem; font-weight: 800; margin-bottom: 2rem; letter-spacing: -0.02em;
+        }
+        
+        .section-text-only .point-paragraph {
+            font-size: 1.15rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;
+        }
+
+        /* 底部 */
+        footer {
+            padding: 40px 0 60px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 900px) {
+            .hero { padding: 140px 0 60px; }
+            .section-grid { grid-template-columns: 1fr; gap: 40px; }
+            .block-odd .section-media, .block-odd .section-text,
+            .block-even .section-media, .block-even .section-text { grid-column: 1; grid-row: auto; }
+            .section-block { margin-bottom: 80px; }
+            .step-number { font-size: 6rem; top: -30px; left: 0; }
+            .section-text-only { padding: 40px 24px; }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="top-nav">
+        <div class="nav-logo">Sector 7 <span>AIGC</span></div>
+        <div class="nav-status">Published</div>
+    </nav>
+
+    <header class="hero container">
+        <h1>半自动咖啡机深度清洁保养教程</h1>
+        <p class="page-desc">讲解半自动咖啡机深度清洁方法与保养要点，保障咖啡风味，延长机器寿命。</p>
+        <div class="hero-badges">
+            <div class="hero-badge">AI Generated</div>
+            <div class="hero-badge">Smart Layout</div>
+        </div>
+    </header>
+
+    <main class="features container">
+        <div class="section-block" style="animation-delay: 0.0s"><div class="step-number">01</div><div class="section-grid block-odd"><div class="section-text"><h2>定期清洁的必要性</h2><p class="point-paragraph">咖啡机长期只用不洗，会严重影响咖啡萃取风味，残留的油脂和水垢还会滋生细菌，甚至导致机器管路堵塞。</p><p class="point-paragraph">为了保证每一杯咖啡的品质，半自动咖啡机的定期深度清洁必不可少。</p></div><div class="section-media"><img src="https://s.coze.cn/t/puoMGSHYKBc/" class="media-img" alt="定期清洁的必要性"></div></div></div><div class="section-block" style="animation-delay: 0.15s"><div class="step-number">02</div><div class="section-grid block-even"><div class="section-text"><h2>清洁前准备工作</h2><p class="point-paragraph">开始深度清洁前，需要准备好专业意式咖啡机清洁粉（或清洁药片）、匹配手柄尺寸的盲碗、带挡水片的专用清洁刷以及干净的微纤维毛巾。</p><p class="point-paragraph">准备齐全工具后，需要确认咖啡机水箱内装有充足的清水。</p></div><div class="section-media"><img src="https://s.coze.cn/t/YTAzMdRRkVo/" class="media-img" alt="清洁前准备工作"></div></div></div><div class="section-block" style="animation-delay: 0.3s"><div class="step-number">03</div><div class="section-grid block-odd"><div class="section-text"><h2>核心步骤：冲煮头反冲洗</h2><p class="point-paragraph">先卸下冲煮头的分水网，用清洁刷仔细刷除卡槽内残留的咖啡渣，随后将手柄原有粉碗更换为盲碗，放入约3克清洁粉后扣入冲煮头。</p><p class="point-paragraph">开启冲煮键运行10秒后关闭静置10秒，重复该动作5次，利用反向水压清洁内部泄压管路；结束后倒掉污水，换清水再反冲洗5次直到无白色泡沫即可。</p></div><div class="section-media"><img src="https://s.coze.cn/t/M9QUVt5fGKQ/" class="media-img" alt="核心步骤：冲煮头反冲洗"></div></div></div><div class="section-block" style="animation-delay: 0.44999999999999996s"><div class="step-number">04</div><div class="section-grid block-even"><div class="section-text"><h2>蒸汽棒与可拆卸配件清洁</h2><p class="point-paragraph">将蒸汽棒完全浸泡在添加了专用清洁液的热水中，开启蒸汽喷发5秒后关闭，静置15分钟软化顽固奶垢，最后用湿毛巾擦拭干净即可。</p><p class="point-paragraph">同时取下接水盘、冲煮手柄下半部分等可拆卸部件，放在温水中配合洗洁精彻底冲洗干净并擦干，注意手柄不要泡水。</p></div><div class="section-media"><img src="https://s.coze.cn/t/4qgf7Dsg3gs/" class="media-img" alt="蒸汽棒与可拆卸配件清洁"></div></div></div><div class="section-block" style="animation-delay: 0.6s"><div class="step-number">05</div><div class="section-text-only"><h2>日常保养避坑建议</h2><p class="point-paragraph">深度清洁建议每制作100杯咖啡或者每个月进行一次。</p><p class="point-paragraph">日常使用中，每次萃取完咖啡要空放两秒热水冲洗冲煮头并扫掉残渣；打发完牛奶后立刻擦拭蒸汽棒并空喷一次，防止牛奶倒吸，好习惯可大大延长咖啡机使用寿命。</p></div></div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            Generated by Sector 7 Engine | 2026.05.19
+        </div>
+    </footer>
+
+</body>
+</html>
