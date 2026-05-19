@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>半自动咖啡机深度清洁保养教程</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 柔和明亮主题，带微微的冷色倾向，显得专业 */
+            --bg-base: #f4f5f8; 
+            --bg-glass: rgba(255, 255, 255, 0.7); /* 半透明玻璃背景 */
+            --glass-border: rgba(255, 255, 255, 0.5);
+            
+            --text-primary: #1a1a1f; 
+            --text-secondary: #6e6e73;
+            --accent-color: #3b82f6; /* 科技感蓝 */
+            --accent-glow: rgba(59, 130, 246, 0.2);
+            
+            /* 精致的弥散阴影 */
+            --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --shadow-hover: 0 30px 60px -15px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+            
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-base);
+            /* 核心背景升级：网格几何底纹，打破单调留白 */
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center top;
+            color: var(--text-primary); 
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 顶部模糊光晕，增加通透感 */
+        .ambient-glow {
+            position: absolute;
+            top: -100px; left: 50%;
+            transform: translateX(-50%);
+            width: 800px; height: 400px;
+            background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(40px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 5vw;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==========================================
+           1. 极简首屏 Hero Section
+           ========================================== */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 15vh;
+        }
+        
+        .hero .brand-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 100px;
+        }
+
+        .hero h1 { 
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            font-weight: 800; 
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            max-width: 800px;
+        }
+
+        .hero p.page-desc { 
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: var(--text-secondary); 
+            font-weight: 400;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        /* ==========================================
+           2. 动态图文交替排版 Section
+           ========================================== */
+        .features { padding: 60px 0 100px; }
+        
+        .section-block { 
+            margin-bottom: 120px; 
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .section-block:last-child { margin-bottom: 0; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr; /* 文字区域稍宽 */
+            gap: 6vw;
+            align-items: center;
+        }
+        
+        /* 交替布局 */
+        .block-odd .section-media { grid-column: 2; grid-row: 1; }
+        .block-odd .section-text { grid-column: 1; grid-row: 1; }
+        .block-even .section-media { grid-column: 1; grid-row: 1; }
+        .block-even .section-text { grid-column: 2; grid-row: 1; }
+
+        /* 左侧文字容器：引入极简玻璃态卡片承载文字 */
+        .section-text {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-float);
+        }
+
+        .section-text h2 { 
+            font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+            font-weight: 700; 
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        
+        .points-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .point-paragraph { 
+            font-size: 1.05rem; 
+            color: var(--text-secondary); 
+            line-height: 1.6;
+            font-weight: 400;
+            position: relative;
+            padding-left: 16px;
+        }
+        
+        /* 段落前的装饰小点 */
+        .point-paragraph::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 10px;
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: var(--accent-color);
+        }
+
+        /* 纯净的图片容器 */
+        .section-media {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-float);
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+        
+        /* 给图片增加一个非常细的内部发光白框，提升通透感 */
+        .section-media::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+        }
+        
+        .section-media:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .media-img { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            object-fit: cover;
+        }
+        
+        .no-media-placeholder {
+            height: 320px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            background: #eaeceF;
+        }
+
+        /* ==========================================
+           3. 极简画廊 Section
+           ========================================== */
+        .gallery { padding: 80px 0 120px; }
+        
+        .gallery h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 3rem;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .gallery-item {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-float);
+            transition: var(--transition-smooth);
+        }
+        
+        .gallery-item:hover { 
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        /* 底部 */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* ==========================================
+           4. 移动端适配
+           ========================================== */
+        @media (max-width: 900px) {
+            .hero { min-height: 40vh; padding-top: 10vh; }
+            .section-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .block-odd .section-media, .block-odd .section-text,
+            .block-even .section-media, .block-even .section-text { grid-column: 1; grid-row: auto; }
+            .section-block { margin-bottom: 80px; }
+            .section-text { padding: 30px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+    
+    <header class="hero container">
+        <div class="brand-tag">Sector 7 Visual Platform</div>
+        <h1>半自动咖啡机深度清洁保养教程</h1>
+        <p class="page-desc">讲解半自动咖啡机深度清洁方法与保养要点，保障咖啡风味，延长机器寿命。</p>
+    </header>
+
+    <main id="features" class="features">
+        <div class="container">
+            <div class="section-block block-odd" style="animation-delay: 0.0s"><div class="section-grid"><div class="section-text"><h2>定期清洁的必要性</h2><div class="points-list"><p class="point-paragraph">咖啡机长期只用不洗，会严重影响咖啡萃取风味，残留的油脂和水垢还会滋生细菌，甚至导致机器管路堵塞。</p><p class="point-paragraph">为了保证每一杯咖啡的品质，半自动咖啡机的定期深度清洁必不可少。</p></div></div><div class="section-media"><img src="https://s.coze.cn/t/puoMGSHYKBc/" class="media-img" alt="定期清洁的必要性"></div></div></div><div class="section-block block-even" style="animation-delay: 0.15s"><div class="section-grid"><div class="section-text"><h2>清洁前准备工作</h2><div class="points-list"><p class="point-paragraph">开始深度清洁前，需要准备好专业意式咖啡机清洁粉（或清洁药片）、匹配手柄尺寸的盲碗、带挡水片的专用清洁刷以及干净的微纤维毛巾。</p><p class="point-paragraph">准备齐全工具后，需要确认咖啡机水箱内装有充足的清水。</p></div></div><div class="section-media"><img src="https://s.coze.cn/t/YTAzMdRRkVo/" class="media-img" alt="清洁前准备工作"></div></div></div><div class="section-block block-odd" style="animation-delay: 0.3s"><div class="section-grid"><div class="section-text"><h2>核心步骤：冲煮头反冲洗</h2><div class="points-list"><p class="point-paragraph">先卸下冲煮头的分水网，用清洁刷仔细刷除卡槽内残留的咖啡渣，随后将手柄原有粉碗更换为盲碗，放入约3克清洁粉后扣入冲煮头。</p><p class="point-paragraph">开启冲煮键运行10秒后关闭静置10秒，重复该动作5次，利用反向水压清洁内部泄压管路；结束后倒掉污水，换清水再反冲洗5次直到无白色泡沫即可。</p></div></div><div class="section-media"><img src="https://s.coze.cn/t/M9QUVt5fGKQ/" class="media-img" alt="核心步骤：冲煮头反冲洗"></div></div></div><div class="section-block block-even" style="animation-delay: 0.44999999999999996s"><div class="section-grid"><div class="section-text"><h2>蒸汽棒与可拆卸配件清洁</h2><div class="points-list"><p class="point-paragraph">将蒸汽棒完全浸泡在添加了专用清洁液的热水中，开启蒸汽喷发5秒后关闭，静置15分钟软化顽固奶垢，最后用湿毛巾擦拭干净即可。</p><p class="point-paragraph">同时取下接水盘、冲煮手柄下半部分等可拆卸部件，放在温水中配合洗洁精彻底冲洗干净并擦干，注意手柄不要泡水。</p></div></div><div class="section-media"><img src="https://s.coze.cn/t/4qgf7Dsg3gs/" class="media-img" alt="蒸汽棒与可拆卸配件清洁"></div></div></div><div class="section-block block-odd" style="animation-delay: 0.6s"><div class="section-grid"><div class="section-text"><h2>日常保养避坑建议</h2><div class="points-list"><p class="point-paragraph">深度清洁建议每制作100杯咖啡或者每个月进行一次。</p><p class="point-paragraph">日常使用中，每次萃取完咖啡要空放两秒热水冲洗冲煮头并扫掉残渣；打发完牛奶后立刻擦拭蒸汽棒并空喷一次，防止牛奶倒吸，好习惯可大大延长咖啡机使用寿命。</p></div></div><div class="section-media"><div class="no-media-placeholder">IMAGE PENDING</div></div></div></div>
+        </div>
+    </main>
+    
+    <section class="gallery">
+        <div class="container">
+            <h2>—— Visual Assets ——</h2>
+            <div class="gallery-grid">
+                <img src="https://s.coze.cn/t/puoMGSHYKBc/" class="gallery-item"><img src="https://s.coze.cn/t/YTAzMdRRkVo/" class="gallery-item"><img src="https://s.coze.cn/t/M9QUVt5fGKQ/" class="gallery-item"><img src="https://s.coze.cn/t/4qgf7Dsg3gs/" class="gallery-item">
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            Generated by Sector 7 Engine | 2026.05.19
+        </div>
+    </footer>
+</body>
+</html>
