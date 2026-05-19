@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打造让人念念不忘的治愈系独立咖啡馆留客全指南</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #F8F9FA;
+            --bg-surface: #FFFFFF;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            
+            --text-primary: #111827;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            
+            --accent: #4F46E5;
+            --accent-light: #EEF2FF;
+            --accent-glow: rgba(79, 70, 229, 0.15);
+            
+            --border-color: rgba(0, 0, 0, 0.05);
+            
+            --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
+            
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-base);
+            /* 元素1：细致的网格背景纸质感 */
+            background-image: 
+                linear-gradient(var(--border-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: var(--text-primary); 
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5vw;
+            position: relative;
+        }
+
+        /* 元素2：极简悬浮顶栏 */
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 70px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5vw;
+            z-index: 100;
+        }
+        
+        .nav-logo { font-weight: 800; font-size: 1.2rem; color: var(--text-primary); letter-spacing: -0.02em; }
+        .nav-logo span { color: var(--accent); }
+        .nav-status { font-size: 0.85rem; font-weight: 600; color: var(--accent); background: var(--accent-light); padding: 6px 14px; border-radius: 100px; }
+
+        /* ==========================================
+           首屏 Hero Section (元素更丰富)
+           ========================================== */
+        .hero {
+            padding: 180px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+        
+        /* 元素3：居中的环境光晕，打破大白墙 */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        .hero h1 { 
+            font-size: clamp(2.8rem, 5vw, 4.2rem);
+            font-weight: 900; 
+            letter-spacing: -0.04em;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .hero p.page-desc { 
+            font-size: 1.15rem;
+            color: var(--text-secondary); 
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+        }
+        
+        /* 元素4：数据指标微件 (视觉装饰) */
+        .hero-badges {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        .hero-badge {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .hero-badge::before {
+            content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+        }
+
+        /* ==========================================
+           内容排版 Section
+           ========================================== */
+        .features { padding: 40px 0 120px; }
+        
+        .section-block { 
+            margin-bottom: 140px; 
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 0.8s forwards cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* 元素5：巨型背景数字水印 */
+        .step-number {
+            position: absolute;
+            top: -60px;
+            left: -40px;
+            font-size: 10rem;
+            font-weight: 900;
+            color: rgba(0,0,0,0.03);
+            z-index: 0;
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        /* --- 有图片时的图文网格 --- */
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .block-odd .section-media { grid-column: 2; grid-row: 1; }
+        .block-odd .section-text { grid-column: 1; grid-row: 1; }
+        .block-even .section-media { grid-column: 1; grid-row: 1; }
+        .block-even .section-text { grid-column: 2; grid-row: 1; }
+
+        .section-text {
+            background: var(--bg-surface);
+            padding: 50px 40px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-float);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .section-text h2 { 
+            font-size: 2.2rem;
+            font-weight: 800; 
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            position: relative;
+        }
+        
+        /* 标题下的装饰线 */
+        .section-text h2::after {
+            content: ''; display: block; width: 40px; height: 4px;
+            background: var(--accent); border-radius: 2px; margin-top: 16px;
+        }
+        
+        .point-paragraph { 
+            font-size: 1.05rem; 
+            color: var(--text-secondary); 
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
+        }
+        .point-paragraph:last-child { margin-bottom: 0; }
+
+        .section-media {
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            border: 8px solid var(--bg-surface); /* 拍立得相框感 */
+            transition: var(--transition);
+        }
+        
+        .section-media:hover { transform: translateY(-10px) rotate(-1deg); box-shadow: var(--shadow-float); }
+        .media-img { width: 100%; height: auto; display: block; object-fit: cover; }
+
+        /* --- 无图片时的纯文字高亮排版 (告别空白) --- */
+        .section-text-only {
+            position: relative;
+            z-index: 1;
+            background: var(--bg-surface);
+            padding: 80px 60px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-float);
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            border-top: 6px solid var(--accent);
+        }
+        
+        .section-text-only h2 {
+            font-size: 2.4rem; font-weight: 800; margin-bottom: 2rem; letter-spacing: -0.02em;
+        }
+        
+        .section-text-only .point-paragraph {
+            font-size: 1.15rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;
+        }
+
+        /* 底部 */
+        footer {
+            padding: 40px 0 60px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 900px) {
+            .hero { padding: 140px 0 60px; }
+            .section-grid { grid-template-columns: 1fr; gap: 40px; }
+            .block-odd .section-media, .block-odd .section-text,
+            .block-even .section-media, .block-even .section-text { grid-column: 1; grid-row: auto; }
+            .section-block { margin-bottom: 80px; }
+            .step-number { font-size: 6rem; top: -30px; left: 0; }
+            .section-text-only { padding: 40px 24px; }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="top-nav">
+        <div class="nav-logo">Sector 7 <span>AIGC</span></div>
+        <div class="nav-status">Published</div>
+    </nav>
+
+    <header class="hero container">
+        <h1>打造让人念念不忘的治愈系独立咖啡馆留客全指南</h1>
+        <p class="page-desc">从环境设计到咖啡出品，拆解治愈系独立咖啡馆的留客经营技巧</p>
+        <div class="hero-badges">
+            <div class="hero-badge">AI Generated</div>
+            <div class="hero-badge">Smart Layout</div>
+        </div>
+    </header>
+
+    <main class="features container">
+        <div class="section-block" style="animation-delay: 0.0s"><div class="step-number">01</div><div class="section-grid block-odd"><div class="section-text"><h2>氛围打底：用自然感设计打造松弛空间</h2><p class="point-paragraph">舒服的氛围不需要高额装修，选对方向简单设计就很出效果。主色调选低饱和暖米色搭配原木色，少用花哨跳色，温润的天然木材比冷硬材质更能让人放松。</p><p class="point-paragraph">留出空间不要塞满座位，在边角点缀不同尺寸的绿植增添呼吸感，优先给靠窗区留出座位利用自然采光，阴天搭配3000K暖色温吊灯，氛围感自然就出来了。</p></div><div class="section-media"><img src="https://p9-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/32abc355bfa048d68f1a5cdba0468d6b.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810266323&amp;x-signature=7lqMMOa8Rn0n1vJXMQbhqlBUoY0%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E5%BA%97%E5%86%85%E7%8E%AF%E5%A2%83.png" class="media-img" alt="氛围打底：用自然感设计打造松弛空间"></div></div></div><div class="section-block" style="animation-delay: 0.15s"><div class="step-number">02</div><div class="section-grid block-even"><div class="section-text"><h2>体验分层：满足不同客人的舒适需求</h2><p class="point-paragraph">客人需求各不相同，做好空间分区就能让所有人满意：靠窗沙发区留给约会聊天的客人，吧台高凳适合独自放空的顾客，角落小方桌留给办公学习的客人，做到互不打扰。</p><p class="point-paragraph">隐形细节才是拉满好感的关键：桌下预留充电插座、桌面不过度拥挤、音乐音量刚好掩盖背景杂音、保持卫生间干净无异味，这些细节让客人愿意久坐。</p></div><div class="section-media"><img src="https://p3-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/a067db1caa37430a8e163a3cb4340991.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810266329&amp;x-signature=DPNzc5iySRn1rUg8qmwL7MQjFiE%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E9%A1%BE%E5%AE%A2%E4%BD%93%E9%AA%8C.png" class="media-img" alt="体验分层：满足不同客人的舒适需求"></div></div></div><div class="section-block" style="animation-delay: 0.3s"><div class="step-number">03</div><div class="section-grid block-odd"><div class="section-text"><h2>出品为王：用专业咖啡筑牢口碑</h2><p class="point-paragraph">氛围感只是加分项，咖啡好喝才是留客核心。新鲜是第一底线，无论意式还是手冲，都要保证豆子定期新鲜烘焙，放久的豆子再好技巧也救不出好风味。</p><p class="point-paragraph">覆盖不同顾客需求：做稳经典意式咖啡，打好绵密奶泡，满足日常喝咖啡的客人；做好手冲单品，放大不同产区豆子的风味，给咖啡爱好者选择；搭配少量适配咖啡的轻食即可，不用做复杂正餐，也不会增加运营成本。</p></div><div class="section-media"><img src="https://p3-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/0d0e76e6a8d244e68a96a41f095a0e57.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810266324&amp;x-signature=w2wdg75r7yJnsWovOvvD79eg03w%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E7%B2%BE%E5%93%81%E5%92%96%E5%95%A1.png" class="media-img" alt="出品为王：用专业咖啡筑牢口碑"></div></div></div><div class="section-block" style="animation-delay: 0.44999999999999996s"><div class="step-number">04</div><div class="section-grid block-even"><div class="section-text"><h2>传播加分：留好“天生出片”的小心机</h2><p class="point-paragraph">好的咖啡馆本身就是客人的社交素材，不需要堆满网红打卡装置，只需要在进门靠窗处或者操作台旁留一个干净角落，打好暖光，就很适合拍照。</p><p class="point-paragraph">客人喝得舒服、拍得满意，自然会主动分享到社交平台，帮店铺免费带来更多新客人。开咖啡馆本质是给客人提供逃离压力的小空间，环境松弛、咖啡好喝，就足够让人念念不忘。</p></div><div class="section-media"><img src="https://p9-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/9aec86380b1d4495a9237aa7e0e1236f.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810266321&amp;x-signature=R5QDFlsOlRQvazoavX40hc2AYgk%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E6%89%8B%E5%86%B2%E5%92%96%E5%95%A1.png" class="media-img" alt="传播加分：留好“天生出片”的小心机"></div></div></div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            Generated by Sector 7 Engine | 2026.05.19
+        </div>
+    </footer>
+
+</body>
+</html>
