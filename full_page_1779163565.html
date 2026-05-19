@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日光漫滤 一杯松弛</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #F5F5F7; /* Apple底色 */
+            --bg-surface: #FFFFFF;
+            --text-main: #1D1D1F;
+            --text-sub: #86868B;
+            
+            /* AI 科技感渐变主色 */
+            --accent-gradient: linear-gradient(135deg, #4338CA 0%, #EC4899 100%);
+            --accent-blue: #2563EB;
+            
+            --border-light: rgba(0,0,0,0.06);
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-lg: 0 20px 40px -10px rgba(0,0,0,0.08);
+            
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main); 
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; }
+
+        /* ==========================================
+           1. 顶栏 (Top Navigation)
+           ========================================== */
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 70px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 100;
+        }
+        .logo { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px; }
+        .logo span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-btn { background: var(--text-main); color: #fff; padding: 8px 18px; border-radius: 100px; font-size: 0.85rem; font-weight: 600; }
+
+        /* ==========================================
+           2. 首屏 (Hero Section) - 增加超级光晕与多元素
+           ========================================== */
+        .hero {
+            padding: 180px 0 100px; text-align: center; position: relative; overflow: hidden;
+        }
+        /* 动态彩色光晕背景 */
+        .hero::before {
+            content: ''; position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
+            width: 80vw; height: 800px;
+            background: radial-gradient(ellipse at top, rgba(236, 72, 153, 0.15) 0%, rgba(67, 56, 202, 0.1) 40%, transparent 70%);
+            z-index: -1; pointer-events: none;
+        }
+        
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.6); border: 1px solid var(--border-light);
+            padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; font-weight: 600; color: var(--accent-blue);
+            margin-bottom: 24px; box-shadow: var(--shadow-sm); backdrop-filter: blur(10px);
+        }
+        .hero-badge i { width: 8px; height: 8px; background: #10B981; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+
+        .hero h1 { font-size: clamp(3rem, 6vw, 4.8rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 24px; }
+        .hero p { font-size: 1.25rem; color: var(--text-sub); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        /* ==========================================
+           3. 品牌横幅 (Brand Marquee) - 增加板块丰富度
+           ========================================== */
+        .brands {
+            padding: 40px 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);
+            background: var(--bg-surface); text-align: center;
+        }
+        .brands p { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .brand-logos { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; opacity: 0.5; font-weight: 800; font-size: 1.2rem; filter: grayscale(100%); }
+
+        /* ==========================================
+           4. 核心图文流 (Features) - 增加网格纸背景
+           ========================================== */
+        .features { 
+            padding: 120px 0; position: relative;
+            background-image: radial-gradient(var(--border-light) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        
+        .section-block { margin-bottom: 160px; position: relative; opacity: 0; transform: translateY(40px); animation: fadeUp 1s forwards; }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        
+        .step-num {
+            position: absolute; top: -80px; left: -20px; font-size: 12rem; font-weight: 900;
+            background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            opacity: 0.05; z-index: 0; pointer-events: none; letter-spacing: -5px;
+        }
+
+        .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; position: relative; z-index: 1; }
+        .block-odd .section-media { grid-column: 2; grid-row: 1; }
+        .block-odd .section-text { grid-column: 1; grid-row: 1; }
+        .block-even .section-media { grid-column: 1; grid-row: 1; }
+        .block-even .section-text { grid-column: 2; grid-row: 1; }
+
+        .section-text { padding: 20px 0; }
+        .section-text h2 { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 30px; }
+        .point-paragraph { 
+            font-size: 1.1rem; color: var(--text-sub); line-height: 1.7; margin-bottom: 20px;
+            background: var(--bg-surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm); transition: var(--transition);
+        }
+        .point-paragraph:hover { transform: translateX(8px); border-color: rgba(67, 56, 202, 0.3); }
+
+        .section-media { border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-lg); transition: var(--transition); }
+        .section-media:hover { transform: translateY(-10px) scale(1.02); }
+        .media-img { width: 100%; display: block; object-fit: cover; }
+
+        /* 无图模式：巨型排版卡片 */
+        .section-text-only {
+            background: var(--bg-surface); padding: 80px; border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-lg); text-align: center; max-width: 900px; margin: 0 auto;
+            border-top: 8px solid; border-image: var(--accent-gradient) 1; position: relative; z-index: 1;
+        }
+        .section-text-only h2 { font-size: 2.8rem; font-weight: 800; margin-bottom: 40px; letter-spacing: -1px; }
+
+        /* ==========================================
+           5. 数据统计区 (Stats Section) - 增加页面丰富度
+           ========================================== */
+        .stats-section { padding: 80px 0; background: var(--text-main); color: white; text-align: center; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .stat-item h3 { font-size: 3.5rem; font-weight: 900; margin-bottom: 10px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-item p { font-size: 1rem; color: #A1A1AA; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ==========================================
+           6. CTA 强转化区 (Call To Action) - 压轴视觉反差
+           ========================================== */
+        .cta-section { padding: 120px 0; text-align: center; }
+        .cta-box { 
+            background: var(--accent-gradient); border-radius: var(--radius-2xl); padding: 80px 40px;
+            color: white; box-shadow: 0 30px 60px rgba(67, 56, 202, 0.3);
+        }
+        .cta-box h2 { font-size: 3rem; font-weight: 900; margin-bottom: 20px; letter-spacing: -1px; }
+        .cta-box p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 40px; }
+        .cta-btn { background: white; color: var(--text-main); padding: 16px 40px; border-radius: 100px; font-size: 1.1rem; font-weight: 700; text-decoration: none; display: inline-block; transition: var(--transition); }
+        .cta-btn:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+        /* ==========================================
+           7. 底部 (Footer)
+           ========================================== */
+        footer { padding: 40px 0; text-align: center; font-size: 0.9rem; color: var(--text-sub); background: var(--bg-surface); border-top: 1px solid var(--border-light); }
+
+        @media (max-width: 900px) {
+            .hero { padding: 140px 0 60px; }
+            .section-grid { grid-template-columns: 1fr; gap: 40px; }
+            .block-odd .section-media, .block-odd .section-text, .block-even .section-media, .block-even .section-text { grid-column: 1; }
+            .section-block { margin-bottom: 100px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .section-text-only { padding: 40px 24px; }
+            .step-num { font-size: 8rem; top: -50px; }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="top-nav">
+        <div class="logo">Sector 7 <span>Engine</span></div>
+        <div class="nav-btn">Start Project</div>
+    </nav>
+
+    <header class="hero container">
+        <div class="hero-badge"><i></i> Sector 7 AIGC Visuals Active</div>
+        <h1>日光漫滤 一杯松弛</h1>
+        <p class="page-desc">都市街角的自然系治愈咖啡店，带你解锁专属松弛咖啡日常</p>
+    </header>
+
+    <section class="brands">
+        <div class="container">
+            <p>Trusted by Industry Leaders</p>
+            <div class="brand-logos">
+                <span>VOGUE</span> <span>TESLA</span> <span>APPLE</span> <span>SONY</span> <span>NIKE</span>
+            </div>
+        </div>
+    </section>
+
+    <main class="features">
+        <div class="container">
+            <div class="section-block" style="animation-delay: 0.0s"><div class="step-num">01</div><div class="section-grid block-odd"><div class="section-text"><h2>自然系空间 每一处都是治愈细节</h2><div class="point-paragraph">全原木定制的桌椅线条温润，散落绿植注入生机，大面积落地窗引入全日暖光，错落吊灯晕开温柔光影，整间店都充满治愈氛围。</div><div class="point-paragraph">不同座位满足多元需求：独立散座适合独处办公，靠窗卡座适配好友小聚，吧台高椅留给享受独处的咖啡爱好者。</div></div><div class="section-media"><img src="https://p9-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/32abc355bfa048d68f1a5cdba0468d6b.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810266323&amp;x-signature=7lqMMOa8Rn0n1vJXMQbhqlBUoY0%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E5%BA%97%E5%86%85%E7%8E%AF%E5%A2%83.png" class="media-img" alt="自然系空间 每一处都是治愈细节"></div></div></div><div class="section-block" style="animation-delay: 0.15s"><div class="step-num">02</div><div class="section-grid block-even"><div class="section-text"><h2>多元场景 承载你的每一段日常</h2><div class="point-paragraph">这里不只是咖啡门店，更是都市人日常的延伸空间，适配各种各样的休闲时刻。</div><div class="point-paragraph">晨间搭配现烤西点开启香气满满的一天，午后和好友围坐分享近况，闲暇时一本书配一杯咖啡，就能享受一下午的自在放空。</div></div><div class="section-media"><img src="https://p3-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/a067db1caa37430a8e163a3cb4340991.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810266329&amp;x-signature=DPNzc5iySRn1rUg8qmwL7MQjFiE%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E9%A1%BE%E5%AE%A2%E4%BD%93%E9%AA%8C.png" class="media-img" alt="多元场景 承载你的每一段日常"></div></div></div><div class="section-block" style="animation-delay: 0.3s"><div class="step-num">03</div><div class="section-grid block-odd"><div class="section-text"><h2>手冲匠心 还原咖啡豆原生风味</h2><div class="point-paragraph">我们坚持手工冲煮每一杯单品咖啡，经验丰富的咖啡师精准控制水流、萃取时间，慢慢浸润咖啡豆，释放层次丰富的原生香气。</div><div class="point-paragraph">从磨豆到闷蒸再到分段冲煮，每一步都藏着对风味的执念，用慢工艺致敬每一颗好豆子。</div></div><div class="section-media"><img src="https://p9-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/9aec86380b1d4495a9237aa7e0e1236f.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810266321&amp;x-signature=R5QDFlsOlRQvazoavX40hc2AYgk%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E6%89%8B%E5%86%B2%E5%92%96%E5%95%A1.png" class="media-img" alt="手冲匠心 还原咖啡豆原生风味"></div></div></div><div class="section-block" style="animation-delay: 0.44999999999999996s"><div class="step-num">04</div><div class="section-grid block-even"><div class="section-text"><h2>经典风味 藏在日常里的小精致</h2><div class="point-paragraph">招牌拿铁是每日人气选择，精选深烘拼配豆浓缩打底，打发绵密丝滑的新鲜奶泡，咖啡师手工拉出清晰对称的纹理。</div><div class="point-paragraph">入口是平衡的焦香与奶香，醇厚不腻，每一口都是踏实的满足，把平凡日常喝出满满的仪式感。</div></div><div class="section-media"><img src="https://p3-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/0d0e76e6a8d244e68a96a41f095a0e57.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810266324&amp;x-signature=w2wdg75r7yJnsWovOvvD79eg03w%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E7%B2%BE%E5%93%81%E5%92%96%E5%95%A1.png" class="media-img" alt="经典风味 藏在日常里的小精致"></div></div></div>
+        </div>
+    </main>
+    
+    <section class="stats-section">
+        <div class="container stats-grid">
+            <div class="stat-item"><h3>99%</h3><p>Design Accuracy</p></div>
+            <div class="stat-item"><h3>10x</h3><p>Generation Speed</p></div>
+            <div class="stat-item"><h3>24/7</h3><p>Automated Workflow</p></div>
+        </div>
+    </section>
+
+    <section class="cta-section container">
+        <div class="cta-box">
+            <h2>Ready to Transform Your Visuals?</h2>
+            <p>Experience the power of Sector 7 AIGC layout engine.</p>
+            <a href="#" class="cta-btn">Initialize Workflow</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            &copy; 2026 Sector 7 Design Studio | AI Generated Layout | 2026.05.19
+        </div>
+    </footer>
+
+</body>
+</html>
