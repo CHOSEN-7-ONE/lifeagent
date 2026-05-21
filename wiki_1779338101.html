@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人养老金科学规划指南</title> 
+    <style>
+        /* [CSS核心变量定义] 统一管理主题色、间距和圆角 */
+        :root {
+            --bg-body: #F8FAFC;
+            --bg-surface: #FFFFFF;
+            --primary: #4F46E5;
+            --primary-light: #EEF2FF;
+            --text-main: #0F172A;
+            --text-sub: #64748B;
+            --border-color: #E2E8F0;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --sidebar-width: 280px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        /* 基础重置与排版 */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, "PingFang SC", sans-serif; 
+            background: var(--bg-body);
+            color: var(--text-main); 
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* 页面主容器：限制最大宽度并添加阴影 */
+        .page-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header 头部区域样式 */
+        header.top-bar { display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; border-bottom: 1px solid var(--border-color); }
+        .logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+        .page-tag { background: var(--bg-body); padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; color: var(--text-sub); border: 1px solid var(--border-color); }
+
+        /* 导航栏区域样式 (使用 Grid 布局对齐侧边栏) */
+        .nav-grid { display: grid; grid-template-columns: var(--sidebar-width) 1fr; background: #FDFDFF; border-bottom: 1px solid var(--border-color); }
+        .nav-left-blank { border-right: 1px solid var(--border-color); display: flex; align-items: center; padding-left: 32px; color: var(--text-sub); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-tabs { display: flex; gap: 12px; padding: 12px 40px; align-items: center; }
+        .nav-tab { padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--text-sub); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+        .nav-tab:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-tab.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); transform: translateY(-1px); }
+
+        /* 主体内容区布局 (Grid) */
+        .content-grid { display: grid; grid-template-columns: var(--sidebar-width) 1fr; min-height: 750px; }
+
+        /* 侧边栏及导航项交互动画 */
+        .sidebar { background: #FAFBFE; padding: 40px 24px; border-right: 1px solid var(--border-color); }
+        .sidebar-item { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 14px; cursor: pointer; margin-bottom: 10px; transition: all 0.2s; border: 1px solid transparent; }
+        .sidebar-item:hover { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transform: translateX(4px); }
+        .sidebar-item.active { background: white; border-color: var(--border-color); box-shadow: var(--shadow); }
+        .dot { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid var(--border-color); transition: 0.3s; }
+        .sidebar-item.active .dot { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        .sidebar-title { font-size: 0.9rem; font-weight: 500; color: var(--text-sub); transition: 0.2s; }
+        .sidebar-item.active .sidebar-title { color: var(--text-main); font-weight: 700; }
+
+        /* 内容面板切换及动画效果 */
+        .main-content { padding: 50px 60px; }
+        .content-pane { display: none; animation: fadeIn 0.5s ease; }
+        .content-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 文本排版及卡片组件样式 */
+        h1 { font-size: 2.4rem; font-weight: 850; margin-bottom: 40px; letter-spacing: -1px; }
+        .section-header { margin: 48px 0 24px; display: flex; align-items: center; gap: 12px; scroll-margin-top: 40px; }
+        .section-header h2 { font-size: 1.5rem; font-weight: 800; }
+        .section-header::before { content: ""; width: 6px; height: 24px; background: var(--primary); border-radius: 10px; }
+        .info-card { background: #F8FAFC; border: 1px solid var(--border-color); padding: 22px 26px; border-radius: var(--radius-lg); margin-bottom: 16px; transition: 0.3s; }
+        .info-card:hover { background: white; border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow); }
+        .info-card p { line-height: 1.7; font-size: 1.05rem; }
+        .media-img { width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow); margin: 20px 0; }
+        
+        /* 沉浸演示播放器核心样式 */
+        .player-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .player-ui { position: absolute; bottom: 0; width: 100%; height: 64px; background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); display: flex; align-items: center; padding: 0 24px; gap: 20px; color: white; }
+        .progress-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; position: relative; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 10px; width: 0%; }
+
+        /* 移动端响应式适配 */
+        @media (max-width: 900px) {
+            .nav-grid, .content-grid { grid-template-columns: 1fr; }
+            .nav-left-blank, .sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="top-bar">
+            <div class="logo">生活百科 Agent</div>
+            <div class="page-tag">个人养老金科学规划指南</div>
+        </header>
+
+        <div class="nav-grid">
+            <div class="nav-left-blank">导航目录</div>
+            <nav class="nav-tabs">
+                <div class="nav-tab active" data-tab="text">📝 核心方案</div>
+                <div class="nav-tab" data-tab="mindmap">🖼️ 视觉图解</div>
+                <div class="nav-tab" data-tab="audio">🎙️ 专家音频</div>
+                <div class="nav-tab" data-tab="slides">🎥 沉浸演示</div>
+            </nav>
+        </div>
+
+        <div class="content-grid">
+            <aside class="sidebar"><div class="sidebar-item active" data-index="0"><div class="dot"></div><div class="sidebar-title">养老需求基础盘点</div></div><div class="sidebar-item " data-index="1"><div class="dot"></div><div class="sidebar-title">养老金规划核心步骤</div></div><div class="sidebar-item " data-index="2"><div class="dot"></div><div class="sidebar-title">主流养老工具配置清单</div></div><div class="sidebar-item " data-index="3"><div class="dot"></div><div class="sidebar-title">常见规划误区避坑</div></div></aside>
+            
+            <main class="main-content">
+                <div id="text" class="content-pane active">
+                    <h1>个人养老金科学规划指南</h1>
+                    <div class="section-header" id="text-sec-0"><h2>养老需求基础盘点</h2></div><div class="info-card"><p>估算退休年支出：按当前物价为当前支出的70%-80%，按年通胀3%折算总需求</p></div><div class="info-card"><p>盘点已有养老资产：统计社保养老金、企业年金、存款理财、可变现房产等资产</p></div><div class="info-card"><p>明确退休时间：女性50/55岁、男性60岁，越早规划复利收益越高</p></div><div class="section-header" id="text-sec-1"><h2>养老金规划核心步骤</h2></div><div class="info-card"><p>第1步：计算养老金缺口：养老总需求减去已有资产，得出需要额外储备的额度</p></div><div class="info-card"><p>第2步：选择适配工具：根据风险承受能力，选择对应风险等级的储备工具</p></div><div class="info-card"><p>第3步：定期复盘调整：每1-2年调整一次，退休前5年逐步降低投资风险</p></div><div class="section-header" id="text-sec-2"><h2>主流养老工具配置清单</h2></div><div class="info-card"><p>基础打底：优先缴纳职工/居民基本养老保险，终身领取，保障基础生存</p></div><div class="info-card"><p>官方补充：个人养老金账户，每年最高1.2万享受个税优惠，可投理财基金保险</p></div><div class="info-card"><p>商业补充：商业养老年金险、增额终身寿，收益确定，适合长期储备</p></div><div class="info-card"><p>增值备选：核心城市收租房产、长期指数定投，适合距离退休10年以上人群</p></div><div class="section-header" id="text-sec-3"><h2>常见规划误区避坑</h2></div><div class="info-card"><p>误区1：只靠社保就够：社保养老金替代率仅约40%，只能覆盖基础需求，需额外补充</p></div><div class="info-card"><p>误区2：中年再规划也不晚：25岁月存1000元按复利计算60岁超百万，35岁开始仅约50万</p></div><div class="info-card"><p>误区3：全投高风险产品：临近退休要优先保本金，避免股市波动耗尽养老储备</p></div>
+                </div>
+                <div id="mindmap" class="content-pane">
+                    <h1>视觉图解</h1>
+                    <div class="section-header" id="mindmap-sec-0"><h2>养老需求基础盘点</h2></div><img src="https://s.coze.cn/t/d5Mk_fEX-u8/" class="media-img"><div class="section-header" id="mindmap-sec-1"><h2>养老金规划核心步骤</h2></div><img src="https://s.coze.cn/t/LH_saYJD7mQ/" class="media-img"><div class="section-header" id="mindmap-sec-2"><h2>主流养老工具配置清单</h2></div><img src="https://s.coze.cn/t/uCGpeiSqYB4/" class="media-img"><div class="section-header" id="mindmap-sec-3"><h2>常见规划误区避坑</h2></div><img src="https://s.coze.cn/t/WWEdmTx_rVg/" class="media-img">
+                </div>
+                <div id="audio" class="content-pane">
+                    <h1>专家音频</h1>
+                    <div class="info-card" id="audio-sec-0"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 养老需求基础盘点</div><audio controls style="width:100%"><source src="https://lf9-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_0e08f68b-2625-4d1d-ab7b-9b3b8607dc60.mp3?lk3s=da27ec82&amp;x-expires=1779597301&amp;x-signature=mUsO5ie5NaulR6f%2BGQsZCwNM2Vg%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-1"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 养老金规划核心步骤</div><audio controls style="width:100%"><source src="https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_487455d2-d0ea-421e-a245-9106b9508bd5.mp3?lk3s=da27ec82&amp;x-expires=1779597299&amp;x-signature=2sRMvynsNNsdVxElIC8PZSLIOFk%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-2"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 主流养老工具配置清单</div><audio controls style="width:100%"><source src="https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_6b11d351-7a05-4b9b-b0dc-2d679bfd3b1f.mp3?lk3s=da27ec82&amp;x-expires=1779597298&amp;x-signature=Hv9E0KV1XGPUtCSo%2B4G3uxDXng4%3D" type="audio/mpeg"></audio></div><div class="info-card" id="audio-sec-3"><div style="font-weight:700;margin-bottom:12px;color:var(--primary);">🎙️ 常见规划误区避坑</div><audio controls style="width:100%"><source src="https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_c61cd81e-3d89-4da9-86b4-ff290c8dc66f.mp3?lk3s=da27ec82&amp;x-expires=1779597301&amp;x-signature=kcAR4nUshjnyBzgpCP6hKiR7n7E%3D" type="audio/mpeg"></audio></div>
+                </div>
+                <div id="slides" class="content-pane">
+                    <h1>影音沉浸演示</h1>
+                    <div class="player-wrap">
+                        <audio id="vAudio"></audio>
+                        <div id="vViewport" style="width:100%; height:100%; cursor:pointer; position:relative;">
+                            <img id="vImg" src="" style="width:100%; height:100%; object-fit:cover; transition: opacity 0.4s;">
+                            <div id="vPlayOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.15);">
+                                <div style="width:70px; height:70px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; box-shadow:0 10px 20px rgba(0,0,0,0.3);">▶</div>
+                            </div>
+                        </div>
+                        <div class="player-ui">
+                            <div id="vToggle" style="cursor:pointer; font-size:20px;">⏸</div>
+                            <div class="progress-bg"><div class="progress-fill" id="vFill"></div></div>
+                            <div id="vInfo" style="font-size:13px; font-weight:600; min-width:50px; text-align:right;">1 / 4</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // 接收后端注入的JSON格式图音匹配数据
+        const media = [{"image": "https://s.coze.cn/t/d5Mk_fEX-u8/", "audio": "https://lf9-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_0e08f68b-2625-4d1d-ab7b-9b3b8607dc60.mp3?lk3s=da27ec82&x-expires=1779597301&x-signature=mUsO5ie5NaulR6f%2BGQsZCwNM2Vg%3D"}, {"image": "https://s.coze.cn/t/LH_saYJD7mQ/", "audio": "https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_487455d2-d0ea-421e-a245-9106b9508bd5.mp3?lk3s=da27ec82&x-expires=1779597299&x-signature=2sRMvynsNNsdVxElIC8PZSLIOFk%3D"}, {"image": "https://s.coze.cn/t/uCGpeiSqYB4/", "audio": "https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_6b11d351-7a05-4b9b-b0dc-2d679bfd3b1f.mp3?lk3s=da27ec82&x-expires=1779597298&x-signature=Hv9E0KV1XGPUtCSo%2B4G3uxDXng4%3D"}, {"image": "https://s.coze.cn/t/WWEdmTx_rVg/", "audio": "https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7568423452617670710_c61cd81e-3d89-4da9-86b4-ff290c8dc66f.mp3?lk3s=da27ec82&x-expires=1779597301&x-signature=kcAR4nUshjnyBzgpCP6hKiR7n7E%3D"}];
+        let curIdx = 0;
+        let isPlaying = false;
+        
+        // 获取播放器核心DOM节点
+        const audio = document.getElementById('vAudio');
+        const img = document.getElementById('vImg');
+        const fill = document.getElementById('vFill');
+
+        // 1. 顶部Tab切换逻辑实现
+        document.querySelectorAll('.nav-tab').forEach(t => {
+            t.onclick = () => {
+                document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                document.querySelectorAll('.content-pane').forEach(p => p.classList.remove('active'));
+                document.getElementById(t.dataset.tab).classList.add('active');
+                window.scrollTo({top:0}); // 切换Tab时自动回到顶部
+            }
+        });
+
+        // 2. 左侧边栏锚点联动逻辑实现
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.onclick = () => {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                const idx = parseInt(item.dataset.index);
+                const activeTab = document.querySelector('.content-pane.active').id;
+                
+                // 如果当前在播放器界面，点击侧边栏直接切图/音频；否则页面平滑滚动到锚点
+                if(activeTab === 'slides') {
+                    loadMedia(idx); play(true);
+                } else {
+                    const target = document.getElementById(`${activeTab}-sec-${idx}`);
+                    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+                }
+            }
+        });
+
+        // 3. 沉浸演示播放器核心：加载对应的图音媒体
+        function loadMedia(i) {
+            curIdx = i;
+            img.style.opacity = 0; // 淡出旧图
+            // 延迟200ms切换新图，实现渐变淡入动画
+            setTimeout(() => { img.src = media[i].image; img.style.opacity = 1; }, 200);
+            audio.src = media[i].audio; // 切换TTS音频源
+            document.getElementById('vInfo').innerText = `${i+1} / ${media.length}`; // 更新页码进度
+            if(isPlaying) audio.play(); // 如果正在播放，则切页后自动继续播放
+        }
+
+        // 4. 沉浸演示播放器核心：播放/暂停控制引擎
+        function play(force) {
+            if(force || audio.paused) { 
+                audio.play(); isPlaying = true; 
+                document.getElementById('vPlayOverlay').style.display='none';
+                document.getElementById('vToggle').innerText='⏸';
+            } else { 
+                audio.pause(); isPlaying = false; 
+                document.getElementById('vPlayOverlay').style.display='flex';
+                document.getElementById('vToggle').innerText='▶';
+            }
+        }
+
+        // 绑定播放器控制事件
+        document.getElementById('vViewport').onclick = () => play(); // 点击画面暂停/播放
+        document.getElementById('vToggle').onclick = () => play();   // 点击按钮暂停/播放
+        // 监听音频播放进度，实时更新底部的红色进度条
+        audio.ontimeupdate = () => fill.style.width = (audio.currentTime/audio.duration*100)+'%';
+        // 当前音频播放完毕后，自动切换并播放下一张图音组合
+        audio.onended = () => { if(curIdx < media.length - 1) loadMedia(curIdx+1); else isPlaying=false; };
+
+        // 页面初始化：加载首个图音对
+        if(media.length > 0) loadMedia(0);
+    </script>
+</body>
+</html>
