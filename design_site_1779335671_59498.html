@@ -1,0 +1,302 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市里的松弛咖啡馆</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #F5F5F7; 
+            --bg-card: #FFFFFF;
+            
+            --text-main: #1D1D1F;
+            --text-sub: #86868B;
+            --accent: #2997FF;
+            
+            --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 30px 80px rgba(0, 0, 0, 0.08);
+            
+            --border-light: rgba(0, 0, 0, 0.04);
+            --radius-card: 32px;
+            --radius-img: 20px;
+            
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main); 
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 视觉层次 1：错落流动网格 (Offset Mesh Grid) */
+        body::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: center top;
+            mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+            z-index: -3; pointer-events: none;
+        }
+
+        /* 视觉层次 2：巨型无感背景字标 (Ghost Typography) */
+        .ghost-bg-text {
+            position: absolute; font-size: clamp(8rem, 15vw, 16rem); font-weight: 900; letter-spacing: -0.05em;
+            color: rgba(0,0,0,0.02); text-transform: uppercase; z-index: -2; pointer-events: none;
+            user-select: none; white-space: nowrap; overflow: hidden; line-height: 1;
+        }
+        .ghost-1 { top: 12%; left: -2%; transform: rotate(-2deg); }
+
+        /* 视觉层次 3：渐变微光氛围层 (Ambient Light Layers) */
+        .ambient-orb {
+            position: absolute; border-radius: 50%; filter: blur(120px);
+            z-index: -2; pointer-events: none; opacity: 0.6;
+        }
+        .orb-1 { top: -5%; left: 0%; width: 50vw; height: 50vw; background: rgba(41, 151, 255, 0.12); }
+        .orb-2 { top: 40%; right: -10%; width: 60vw; height: 60vw; background: rgba(187, 107, 255, 0.08); }
+        .orb-3 { bottom: 10%; left: -10%; width: 50vw; height: 50vw; background: rgba(41, 151, 255, 0.1); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; }
+
+        /* ==========================================
+           导航栏 & 首屏 (Nav & Hero)
+           ========================================== */
+        .top-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 64px;
+            background: rgba(245, 245, 247, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 1000;
+        }
+        .logo { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px; color: var(--text-main); }
+        
+        .hero { padding: 180px 0 80px; text-align: center; }
+        .hero-tag {
+            display: inline-block; padding: 6px 18px; border-radius: 100px;
+            background: rgba(255, 255, 255, 0.8); border: 1px solid var(--border-light);
+            backdrop-filter: blur(10px); font-size: 0.85rem; font-weight: 700;
+            color: var(--accent); margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            letter-spacing: 0.5px;
+        }
+        .hero h1 { font-size: clamp(2.8rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.15; margin-bottom: 24px; }
+        .hero p.page-desc { font-size: 1.25rem; color: var(--text-sub); max-width: 650px; margin: 0 auto; line-height: 1.6; }
+
+        /* ==========================================
+           对齐卡片流 (Features Cards)
+           ========================================== */
+        .features { padding: 40px 0; }
+        
+        .feature-card {
+            display: flex; align-items: center; gap: 60px;
+            background: var(--bg-card); border-radius: var(--radius-card);
+            padding: 50px; margin-bottom: 60px;
+            box-shadow: var(--shadow-card); border: 1px solid var(--border-light);
+            opacity: 0; transform: translateY(40px); animation: fadeUp 1s forwards cubic-bezier(0.16, 1, 0.3, 1);
+            transition: var(--transition);
+        }
+        .feature-card:last-child { margin-bottom: 0; }
+        .feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+        
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        .feature-card.reverse { flex-direction: row-reverse; }
+
+        .text-side { flex: 1; padding: 20px 0; }
+        .text-side h2 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 20px; color: var(--text-main); }
+        .point-paragraph { font-size: 1.1rem; color: var(--text-sub); line-height: 1.7; margin-bottom: 16px; }
+        .point-paragraph:last-child { margin-bottom: 0; }
+
+        .image-side { flex: 1.1; border-radius: var(--radius-img); overflow: hidden; position: relative; background: var(--bg-page); }
+        .image-side::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-img); border: 1px solid rgba(0,0,0,0.04); pointer-events: none; }
+        .media-img { width: 100%; height: auto; display: block; object-fit: cover; transition: var(--transition); }
+        .feature-card:hover .media-img { transform: scale(1.02); }
+
+        .feature-card.no-image { flex-direction: column; text-align: center; padding: 80px 60px; }
+        .feature-card.no-image .text-side { padding: 0; max-width: 800px; }
+        .feature-card.no-image h2 { font-size: 2.4rem; }
+
+        /* ==========================================
+           数据解构手风琴 (Dynamic Data Accordion)
+           ========================================== */
+        .data-accordion-section { padding: 120px 0; position: relative; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; color: var(--text-main); }
+        .section-header p { color: var(--text-sub); font-size: 1.15rem; max-width: 600px; margin: 0 auto; }
+        
+        .accordion-wrapper { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        .acc-item { background: var(--bg-card); border-radius: 24px; box-shadow: var(--shadow-card); overflow: hidden; transition: var(--transition); border: 1px solid var(--border-light); }
+        .acc-item.active { box-shadow: var(--shadow-hover); transform: translateY(-4px); border-color: rgba(41, 151, 255, 0.3); }
+        
+        .acc-trigger { padding: 32px 40px; font-weight: 700; font-size: 1.25rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--text-main); }
+        .acc-trigger::after { content: '+'; font-size: 1.8rem; font-weight: 400; color: var(--text-sub); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .acc-item.active .acc-trigger::after { transform: rotate(45deg); color: var(--accent); }
+        
+        .acc-content { max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .acc-content-inner { padding: 0 40px 40px; color: var(--text-sub); font-size: 1.1rem; line-height: 1.75; }
+
+        /* ==========================================
+           全动态黄金三列矩阵页脚 (Dynamic Premium Footer)
+           ========================================== */
+        .premium-footer { background: var(--bg-card); border-top: 1px solid var(--border-light); padding: 100px 0 40px; position: relative; z-index: 10; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 80px; margin-bottom: 80px; }
+        
+        .footer-brand h3 { font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 20px; letter-spacing: -0.5px; }
+        .footer-brand p { color: var(--text-sub); line-height: 1.8; font-size: 1.05rem; max-width: 85%; }
+        
+        .footer-col h4 { color: var(--text-main); font-weight: 700; margin-bottom: 28px; font-size: 1.05rem; letter-spacing: 0.5px; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 16px; }
+        .footer-col ul li a { text-decoration: none; color: var(--text-sub); font-size: 0.95rem; transition: var(--transition); display: inline-block; }
+        .footer-col ul li a:hover { color: var(--accent); transform: translateX(4px); } /* 优雅的悬停浮动效 */
+        
+        .footer-bottom { border-top: 1px solid var(--border-light); padding-top: 40px; display: flex; justify-content: space-between; align-items: center; color: var(--text-sub); font-size: 0.85rem; }
+
+        @media (max-width: 900px) {
+            .ghost-bg-text { display: none; }
+            .hero { padding: 120px 0 40px; }
+            .feature-card, .feature-card.reverse { flex-direction: column; gap: 40px; padding: 30px; border-radius: 24px; }
+            .image-side { width: 100%; }
+            .feature-card.no-image { padding: 40px 24px; }
+            .acc-trigger { padding: 24px; font-size: 1.1rem; }
+            .acc-content-inner { padding: 0 24px 24px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+            .footer-brand p { max-width: 100%; }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+
+    <div class="ghost-bg-text ghost-1">城市里的松弛咖啡</div>
+    
+    <nav class="top-nav">
+        <div class="logo">城市里的松弛咖啡</div>
+    </nav>
+
+    <header class="hero container">
+        <div class="hero-tag">城市里的松弛咖啡 专属数字空间</div>
+        <h1>城市里的松弛咖啡馆</h1>
+        <p class="page-desc">在喧嚣城市开辟慢生活空间，用原木氛围与匠心咖啡，给你专属惬意松弛时光。</p>
+    </header>
+
+    <main id="features" class="features container">
+        <div class="feature-card " style="animation-delay: 0.0s"><div class="text-side"><h2>自然原木的舒适空间</h2><p class="point-paragraph">大面积落地窗引自然光入室，原木家具搭配原生绿植，营造出柔和通透的松弛氛围。</p><p class="point-paragraph">错落分布多元座位，适配独处办公、好友小聚多种场景，暖调氛围灯从晨光到暮色都保持舒适温度，每个人都能各得自在。</p></div><div class="image-side"><img src="https://p3-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/348ad1b9d63f4a20b477ffea25136b71.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810358805&amp;x-signature=3to0fomDvU7tAd3rCl4J0ZQWz5E%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E5%BA%97%E5%86%85%E7%8E%AF%E5%A2%83.png" class="media-img" alt="自然原木的舒适空间"></div></div><div class="feature-card reverse" style="animation-delay: 0.15s"><div class="text-side"><h2>适配每一种生活场景</h2><p class="point-paragraph">独处办公可选择安静窗边区，这里配备充电接口与稳定网络，是移动办公、阅读思考的理想场所。</p><p class="point-paragraph">好友小聚有柔软沙发区预留充足私密空间，适合轻松闲谈；路过歇脚也有开放吧台高座随坐，赶路间隙也能享受放空时刻。</p></div><div class="image-side"><img src="https://p3-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/42c33936ac3c48e390822fbababb9704.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810358806&amp;x-signature=qHGUmAWIwOnxokRGVj6N%2FSeJNCU%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E9%A1%BE%E5%AE%A2%E4%BD%93%E9%AA%8C.png" class="media-img" alt="适配每一种生活场景"></div></div><div class="feature-card " style="animation-delay: 0.3s"><div class="text-side"><h2>手工匠心的精品咖啡</h2><p class="point-paragraph">全部采用当日新鲜烘焙的精选单品咖啡豆，牢牢锁住原产地最本真的风味层次。</p><p class="point-paragraph">资深咖啡师全程手工冲制，精准掌控萃取参数，从冲煮手法到奶泡拉花，每一步都苛求细节，还原咖啡原生香气。</p></div><div class="image-side"><img src="https://p3-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/6fa5c432f0174c6191d69c7558e8d8ba.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810358805&amp;x-signature=GSqB2JnvGlCBsrNATGbm6CF4dGU%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E6%89%8B%E5%86%B2%E5%92%96%E5%95%A1.png" class="media-img" alt="手工匠心的精品咖啡"></div></div><div class="feature-card reverse" style="animation-delay: 0.44999999999999996s"><div class="text-side"><h2>风味与体验的多元选择</h2><p class="point-paragraph">经典意式系列涵盖丝滑拿铁、醇厚卡布奇诺，平衡口感适配大多数人的日常喜好。</p><p class="point-paragraph">手冲单品系列拥有清晰的花香、果香分层，满足资深咖啡爱好者的品鉴需求，还有手工现烤甜点，新鲜出炉与咖啡风味完美互补。</p></div><div class="image-side"><img src="https://p3-bot-workflow-sign.byteimg.com/tos-cn-i-mdko3gqilj/11f59da45f9d42c08e9dfa298643797e.png~tplv-mdko3gqilj-image.image?rk3s=81d4c505&amp;x-expires=1810358805&amp;x-signature=DxpoWOlje2CF9aOu%2FHjvmeq4D58%3D&amp;x-wf-file_name=%E5%92%96%E5%95%A1%E9%A6%86-%E7%B2%BE%E5%93%81%E5%92%96%E5%95%A1.png" class="media-img" alt="风味与体验的多元选择"></div></div>
+    </main>
+
+    <section class="data-accordion-section container">
+        <div class="section-header">
+            <h2>深度架构与层级纵览</h2>
+            <p>基于 城市里的松弛咖啡 核心资产延展的交互式知识网络</p>
+        </div>
+        <div class="accordion-wrapper">
+            
+        <div class="acc-item active">
+            <div class="acc-trigger">自然原木的舒适空间</div>
+            <div class="acc-content" style='max-height: 800px;'>
+                <div class="acc-content-inner">
+                    <p style="margin-bottom:16px;">大面积落地窗引自然光入室，原木家具搭配原生绿植，营造出柔和通透的松弛氛围。</p><p style="margin-bottom:16px;">错落分布多元座位，适配独处办公、好友小聚多种场景，暖调氛围灯从晨光到暮色都保持舒适温度，每个人都能各得自在。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="acc-item ">
+            <div class="acc-trigger">适配每一种生活场景</div>
+            <div class="acc-content" >
+                <div class="acc-content-inner">
+                    <p style="margin-bottom:16px;">独处办公可选择安静窗边区，这里配备充电接口与稳定网络，是移动办公、阅读思考的理想场所。</p><p style="margin-bottom:16px;">好友小聚有柔软沙发区预留充足私密空间，适合轻松闲谈；路过歇脚也有开放吧台高座随坐，赶路间隙也能享受放空时刻。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="acc-item ">
+            <div class="acc-trigger">手工匠心的精品咖啡</div>
+            <div class="acc-content" >
+                <div class="acc-content-inner">
+                    <p style="margin-bottom:16px;">全部采用当日新鲜烘焙的精选单品咖啡豆，牢牢锁住原产地最本真的风味层次。</p><p style="margin-bottom:16px;">资深咖啡师全程手工冲制，精准掌控萃取参数，从冲煮手法到奶泡拉花，每一步都苛求细节，还原咖啡原生香气。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="acc-item ">
+            <div class="acc-trigger">风味与体验的多元选择</div>
+            <div class="acc-content" >
+                <div class="acc-content-inner">
+                    <p style="margin-bottom:16px;">经典意式系列涵盖丝滑拿铁、醇厚卡布奇诺，平衡口感适配大多数人的日常喜好。</p><p style="margin-bottom:16px;">手冲单品系列拥有清晰的花香、果香分层，满足资深咖啡爱好者的品鉴需求，还有手工现烤甜点，新鲜出炉与咖啡风味完美互补。</p>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+    </section>
+
+    <footer class="premium-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>城市里的松弛咖啡</h3>
+                    <p>在喧嚣城市开辟慢生活空间，用原木氛围与匠心咖啡，给你专属惬意松弛时光。</p>
+                </div>
+                <div class="footer-col">
+                    <h4>内容索引</h4>
+                    <ul>
+                        <li><a href="#">自然原木的舒适空间</a></li>
+<li><a href="#">适配每一种生活场景</a></li>
+
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>深度探索</h4>
+                    <ul>
+                        <li><a href="#">手工匠心的精品咖啡</a></li>
+<li><a href="#">风味与体验的多元选择</a></li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 城市里的松弛咖啡 All Rights Reserved.</div>
+                <div>数字交互页面归档 · 2026.05.21</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 动态解构手风琴交互逻辑
+        document.querySelectorAll('.acc-trigger').forEach(trigger => {
+            trigger.onclick = () => {
+                const item = trigger.parentElement;
+                const content = trigger.nextElementSibling;
+                
+                if (item.classList.contains('active')) {
+                    item.classList.remove('active');
+                    content.style.maxHeight = null;
+                } else {
+                    // 关闭其他打开的项
+                    document.querySelectorAll('.acc-item').forEach(el => {
+                        el.classList.remove('active');
+                        el.querySelector('.acc-content').style.maxHeight = null;
+                    });
+                    
+                    item.classList.add('active');
+                    // 设置足够大的动态高度
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
